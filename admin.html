@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="robots" content="noindex, nofollow"/>
+<title>KINETIC® — Admin Panel</title>
+<style>
+  :root{ --ink:#08080A; --flame:#FF5A45; --gold:#D4AF37; --cream:#F5F0EA; }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{ background:var(--ink); color:var(--cream); font:15px/1.5 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; }
+  .mono{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; letter-spacing:.08em; font-size:11px; text-transform:uppercase; }
+  header{ position:sticky; top:0; z-index:50; background:rgba(8,8,10,.94); backdrop-filter:blur(8px); border-bottom:1px solid rgba(245,240,234,.14); padding:14px 22px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+  header h1{ font-size:18px; letter-spacing:.04em; text-transform:uppercase; font-weight:900; }
+  header h1 span{ color:var(--flame); }
+  .spacer{ flex:1; }
+  .btn{ cursor:pointer; border:2px solid var(--cream); background:transparent; color:var(--cream); padding:9px 18px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; font-size:11px; transition:all .15s; text-decoration:none; display:inline-block; }
+  .btn:hover{ background:var(--cream); color:var(--ink); }
+  .btn-solid{ background:var(--flame); border-color:var(--flame); color:#120604; }
+  .btn-solid:hover{ background:var(--cream); border-color:var(--cream); color:var(--ink); }
+  .btn-gold{ border-color:var(--gold); color:var(--gold); }
+  .btn-gold:hover{ background:var(--gold); color:var(--ink); }
+  .btn[disabled]{ opacity:.45; cursor:wait; }
+  #status{ font-size:12px; color:var(--gold); min-height:16px; width:100%; }
+  #status.err{ color:var(--flame); }
+  main{ max-width:1180px; margin:0 auto; padding:26px 20px 90px; }
+  nav.tabs{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:26px; }
+  nav.tabs button{ cursor:pointer; background:rgba(245,240,234,.06); color:rgba(245,240,234,.75); border:1px solid rgba(245,240,234,.18); padding:9px 15px; font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
+  nav.tabs button.active{ background:var(--flame); color:#120604; border-color:var(--flame); }
+  section.panel{ display:none; }
+  section.panel.active{ display:block; }
+  .card{ background:rgba(245,240,234,.045); border:1px solid rgba(245,240,234,.14); padding:22px; margin-bottom:18px; }
+  .card h2{ font-size:15px; text-transform:uppercase; letter-spacing:.12em; margin-bottom:16px; color:var(--gold); }
+  .card h3{ font-size:13px; text-transform:uppercase; letter-spacing:.1em; margin:18px 0 10px; color:var(--flame); }
+  .grid{ display:grid; gap:14px; }
+  .g2{ grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); }
+  .g3{ grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); }
+  .g4{ grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); }
+  label.f{ display:block; margin-bottom:2px; }
+  label.f span{ display:block; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:rgba(245,240,234,.55); margin-bottom:6px; font-weight:700; }
+  input[type=text],input[type=number],input[type=password],textarea,select{ width:100%; background:#0F0F13; border:1px solid rgba(245,240,234,.22); color:var(--cream); padding:10px 12px; font:inherit; font-size:14px; }
+  input:focus,textarea:focus,select:focus{ outline:2px solid var(--gold); outline-offset:-1px; }
+  textarea{ min-height:76px; resize:vertical; }
+  input[type=color]{ width:52px; height:38px; padding:2px; background:#0F0F13; border:1px solid rgba(245,240,234,.22); cursor:pointer; }
+  .cw-row{ display:flex; gap:8px; align-items:center; margin-bottom:8px; }
+  .cw-row input[type=text]{ flex:1; }
+  .prod{ border:1px solid rgba(245,240,234,.16); padding:18px; margin-bottom:16px; background:rgba(8,8,10,.5); }
+  .prod-head{ display:flex; align-items:center; gap:12px; margin-bottom:14px; flex-wrap:wrap; }
+  .prod-head img{ width:64px; height:48px; object-fit:cover; border:1px solid rgba(245,240,234,.2); }
+  .prod-head b{ font-size:15px; letter-spacing:.03em; }
+  .prod-head .num{ color:var(--flame); font-weight:900; }
+  .hint{ font-size:12px; color:rgba(245,240,234,.45); margin-top:6px; }
+  /* gate */
+  #gate{ position:fixed; inset:0; background:var(--ink); z-index:100; display:flex; align-items:center; justify-content:center; overflow:auto; padding:20px; }
+  #gate .box{ width:min(460px,94vw); border:2px solid var(--flame); padding:36px 30px; background:#0C0C0F; box-shadow:12px 12px 0 rgba(255,90,69,.35); }
+  #gate h1{ font-size:22px; text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px; }
+  #gate p{ color:rgba(245,240,234,.55); font-size:13px; margin-bottom:16px; }
+  #gate input[type=password]{ margin-bottom:10px; }
+  #gate .err{ color:var(--flame); font-size:13px; min-height:18px; margin-bottom:8px; }
+  #gate label.chk{ display:flex; gap:8px; align-items:center; font-size:13px; color:rgba(245,240,234,.65); margin-bottom:16px; cursor:pointer; }
+  .tok-help{ font-size:12px; color:rgba(245,240,234,.45); margin-top:14px; line-height:1.7; }
+  .tok-help b{ color:var(--gold); }
+  .savebar-note{ font-size:12px; color:rgba(245,240,234,.4); }
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="box">
+    <h1>KINETIC<span style="color:var(--flame)">®</span> Admin</h1>
+    <p>Paste your GitHub token (fine-grained, <b>Contents: Read &amp; Write</b> on the site repo). It is stored only in this browser and used to save <code style="color:var(--gold)">content.json</code> to your repo.</p>
+    <input type="password" id="gateToken" placeholder="github_pat_..." autocomplete="off"/>
+    <label class="chk"><input type="checkbox" id="gateRemember" checked/> Remember in this browser</label>
+    <div class="err" id="gateErr"></div>
+    <button class="btn btn-solid" id="gateBtn" style="width:100%">Connect to GitHub →</button>
+    <div class="tok-help">
+      Token banane ka tareeqa: <b>github.com → Settings → Developer settings → Fine-grained tokens → Generate new token</b>.
+      Repository access: <b>Only select repositories</b> (apna site wala repo). Permissions: <b>Contents → Read and write</b>. Bas.
+    </div>
+  </div>
+</div>
+
+<header>
+  <h1>KINETIC<span>®</span> Admin</h1>
+  <span class="mono" id="repoLabel" style="color:rgba(245,240,234,.45)"></span>
+  <span class="mono" id="lastSaved" style="color:rgba(245,240,234,.45)"></span>
+  <div class="spacer"></div>
+  <a class="btn" id="viewSiteBtn" href="./" target="_blank" rel="noopener">View site ↗</a>
+  <button class="btn btn-gold" id="resetBtn">Reset to defaults</button>
+  <button class="btn btn-solid" id="saveBtn">Save &amp; publish ⚡</button>
+  <button class="btn" id="logoutBtn">Disconnect</button>
+  <div id="status"></div>
+</header>
+
+<main>
+  <nav class="tabs" id="tabs"></nav>
+  <div id="panels"></div>
+  <p class="savebar-note">Save dabate hi content GitHub repo mein commit ho jata hai aur visitors ko seconds mein naya content milna shuru — <b>koi deploy nahi</b>. (GitHub cache ki wajah se kabhi kabhi 1-2 minute lag sakte hain.)</p>
+</main>
+
+<script src="assets/kinetic-gh-config.js"></script>
+<script src="assets/kinetic-defaults.js"></script>
+<script>
+(function(){
+'use strict';
+var DEFAULTS = window.__KINETIC_DEFAULTS__ || {};
+var GH = window.__GH__ || {};
+var API = 'https://api.github.com';
+var REVIEW_COUNT_KEYS = ['voltageProCarbon','apex01Racer','monolithHigh','strikeCourtLo','infernoTiltCarbon','nebulaRunner','shadowKnit','retro85Carbon'];
+var IMAGE_CHOICES = [
+  '/assets/images/40a470397f3ef7b7.jpg','/assets/images/01c31163ece2a19f.jpg','/assets/images/2c53504d2430d75e.jpg',
+  '/assets/images/5916e42350811ca9.jpg','/assets/images/81ef1d14c54de2f1.jpg','/assets/images/eb01e5bab3a80e98.jpg',
+  '/assets/images/407e125ad12a7343.jpg','/assets/images/7e7afef3a68aab55.jpg','/assets/images/e325ae933be2eb0a.jpg',
+  '/assets/images/31cc6f2be8488145.jpg','/assets/images/7ec35cfc4888c347.jpg','/assets/images/11073cb2ab9c627b.jpg',
+  '/assets/images/3c382aa6d2a3c175.jpg','/assets/images/68fa9dff96eb4be2.jpg','/assets/images/fb10e562f94a80bc.jpg',
+  '/assets/images/3376a541498e8878.jpg','/assets/images/ef928fbb81a95a94.jpg','/assets/images/0aa80a56f46b796a.jpg',
+  '/assets/images/793473e10624e6a6.jpg'
+];
+
+var state = null;
+var token = localStorage.getItem('kinetic-gh-token') || '';
+var fileSha = null;   // sha of content.json for updates
+
+/* ---------- helpers ---------- */
+function $(s,c){ return (c||document).querySelector(s); }
+function clone(o){ return JSON.parse(JSON.stringify(o)); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function status(msg, isErr){
+  var el = $('#status'); el.textContent = msg || ''; el.className = isErr ? 'err' : '';
+  if (msg) setTimeout(function(){ if (el.textContent === msg) el.textContent=''; }, 7000);
+}
+function ghHeaders(raw){
+  return {
+    'Accept': raw ? 'application/vnd.github.raw+json' : 'application/vnd.github+json',
+    'Authorization': 'Bearer ' + token,
+    'X-GitHub-Api-Version': '2022-11-28'
+  };
+}
+function repoPath(){ return '/repos/' + GH.owner + '/' + GH.repo + '/contents/content.json'; }
+function toBase64(str){
+  var bytes = new TextEncoder().encode(str), bin = '';
+  for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin);
+}
+
+function mergeContent(base, saved){
+  var out = clone(base || {});
+  if (!saved || typeof saved !== 'object' || Array.isArray(saved)) return out;
+  ['marketing','commerce','products','reviews','looks','techImgs','texts'].forEach(function(k){
+    if (saved[k] === undefined) return;
+    out[k] = saved[k];
+  });
+  return out;
+}
+
+/* ---------- gate ---------- */
+function showGate(){ $('#gate').style.display = 'flex'; $('#gateToken').focus(); }
+function hideGate(){ $('#gate').style.display = 'none'; }
+
+function verifyToken(t){
+  return fetch(API + '/user', { headers: { 'Authorization': 'Bearer ' + t, 'Accept': 'application/vnd.github+json' } })
+    .then(function(r){ return r.json().then(function(j){ return { status:r.status, body:j }; }); });
+}
+function tryConnect(){
+  var t = $('#gateToken').value.trim();
+  if (!t) { $('#gateErr').textContent = 'Token paste karein pehle.'; return; }
+  $('#gateErr').textContent = 'Connecting…';
+  verifyToken(t).then(function(res){
+    if (res.status === 200 && res.body && res.body.login) {
+      token = t;
+      if ($('#gateRemember').checked) localStorage.setItem('kinetic-gh-token', t);
+      hideGate();
+      status('Connected as @' + res.body.login);
+      init();
+    } else {
+      $('#gateErr').textContent = 'Token invalid ya expire ho gaya hai. (' + (res.body && res.body.message ? res.body.message : res.status) + ')';
+    }
+  }).catch(function(){ $('#gateErr').textContent = 'Network error — GitHub tak pohnch nahi paye.'; });
+}
+$('#gateBtn').addEventListener('click', tryConnect);
+$('#gateToken').addEventListener('keydown', function(e){ if (e.key === 'Enter') tryConnect(); });
+$('#logoutBtn').addEventListener('click', function(){ localStorage.removeItem('kinetic-gh-token'); location.reload(); });
+
+/* ---------- field builders ---------- */
+function fieldText(label, get, set, opts){
+  opts = opts || {};
+  var w = document.createElement('label'); w.className = 'f';
+  w.innerHTML = '<span>' + esc(label) + '</span>';
+  var inp = document.createElement(opts.area ? 'textarea' : 'input');
+  if (!opts.area) inp.type = 'text';
+  inp.value = get() == null ? '' : String(get());
+  inp.addEventListener('input', function(){ set(inp.value); markDirty(); });
+  w.appendChild(inp);
+  if (opts.hint) { var h = document.createElement('div'); h.className='hint'; h.textContent = opts.hint; w.appendChild(h); }
+  return w;
+}
+function fieldNumber(label, get, set, opts){
+  opts = opts || {};
+  var w = document.createElement('label'); w.className = 'f';
+  w.innerHTML = '<span>' + esc(label) + '</span>';
+  var inp = document.createElement('input'); inp.type = 'number';
+  if (opts.step) inp.step = opts.step;
+  if (opts.min !== undefined) inp.min = opts.min;
+  var v = get(); inp.value = (v === null || v === undefined || v === '') ? '' : v;
+  inp.addEventListener('input', function(){
+    var raw = inp.value.trim();
+    if (raw === '') { set(opts.allowNull ? null : ''); } else { var n = Number(raw); set(isFinite(n) ? n : (opts.allowNull ? null : '')); }
+    markDirty();
+  });
+  w.appendChild(inp);
+  if (opts.hint) { var h = document.createElement('div'); h.className='hint'; h.textContent = opts.hint; w.appendChild(h); }
+  return w;
+}
+function fieldSelect(label, value, options, set){
+  var w = document.createElement('label'); w.className = 'f';
+  w.innerHTML = '<span>' + esc(label) + '</span>';
+  var sel = document.createElement('select');
+  options.forEach(function(o){
+    var op = document.createElement('option'); op.value = o; op.textContent = o;
+    if (String(o) === String(value)) op.selected = true;
+    sel.appendChild(op);
+  });
+  sel.addEventListener('change', function(){ set(sel.value); markDirty(); });
+  w.appendChild(sel);
+  return w;
+}
+function card(title){
+  var c = document.createElement('div'); c.className = 'card';
+  if (title) { var h = document.createElement('h2'); h.textContent = title; c.appendChild(h); }
+  return c;
+}
+function grid(cls){ var g = document.createElement('div'); g.className = 'grid ' + cls; return g; }
+
+/* ---------- panels ---------- */
+var TABS = [
+  { id:'hero', label:'🏠 Hero & Site', build: buildHero },
+  { id:'ticker', label:'📣 Ticker', build: buildTicker },
+  { id:'products', label:'👟 Products', build: buildProducts },
+  { id:'sections', label:'📐 Section headings', build: buildSections },
+  { id:'tech', label:'🔬 Tech features', build: buildTech },
+  { id:'looks', label:'🖼 Lookbook', build: buildLooks },
+  { id:'reviews', label:'💬 Testimonials', build: buildReviews },
+  { id:'club', label:'🔥 Club & Footer', build: buildClub },
+  { id:'numbers', label:'🔢 Numbers & Commerce', build: buildNumbers }
+];
+
+function buildTabs(){
+  var nav = $('#tabs'); nav.innerHTML = '';
+  var panels = $('#panels'); panels.innerHTML = '';
+  TABS.forEach(function(t, i){
+    var b = document.createElement('button');
+    b.textContent = t.label; b.dataset.tab = t.id;
+    b.addEventListener('click', function(){ activate(t.id); });
+    nav.appendChild(b);
+    var s = document.createElement('section');
+    s.className = 'panel'; s.id = 'panel-' + t.id;
+    t.build(s);
+    panels.appendChild(s);
+    if (i === 0) { b.classList.add('active'); s.classList.add('active'); }
+  });
+}
+function activate(id){
+  document.querySelectorAll('nav.tabs button').forEach(function(b){ b.classList.toggle('active', b.dataset.tab === id); });
+  document.querySelectorAll('section.panel').forEach(function(p){ p.classList.toggle('active', p.id === 'panel-' + id); });
+  window.scrollTo({ top: 0 });
+}
+function T(key, label, opts){
+  return fieldText(label, function(){ return state.texts[key]; }, function(v){ state.texts[key] = v; }, opts);
+}
+
+function buildHero(root){
+  var c = card('Site');
+  var g = grid('g2');
+  g.appendChild(T('site.title', 'Browser tab title', { hint: 'Shown in the browser tab & search results.' }));
+  g.appendChild(T('site.badge', 'Preloader badge'));
+  c.appendChild(g); root.appendChild(c);
+
+  c = card('Hero');
+  g = grid('g3');
+  g.appendChild(T('hero.badge', 'Badge line'));
+  g.appendChild(T('hero.line1', 'Heading — line 1'));
+  g.appendChild(T('hero.line2', 'Heading — line 2 (flame dot stays)'));
+  g.appendChild(T('hero.line3', 'Heading — line 3 (outline style)'));
+  g.appendChild(T('hero.cta1', 'Primary button text'));
+  g.appendChild(T('hero.cta2', 'Secondary button text'));
+  c.appendChild(g);
+  c.appendChild(T('hero.sub', 'Hero paragraph', { area:true }));
+  root.appendChild(c);
+}
+
+function buildTicker(root){
+  var c = card('Announcement ticker (top bar)');
+  var hint = document.createElement('p'); hint.className = 'hint'; hint.style.marginBottom = '14px';
+  hint.textContent = 'Note: the “New: … limited edition” ticker item is generated automatically from product #5 (Inferno Tilt Carbon).';
+  c.appendChild(hint);
+  var g = grid('g3');
+  g.appendChild(T('ticker.0', 'Ticker item 1'));
+  g.appendChild(T('ticker.1', 'Ticker item 2'));
+  g.appendChild(T('ticker.2', 'Ticker item 3'));
+  c.appendChild(g); root.appendChild(c);
+}
+
+function buildProducts(root){
+  var c = card('Products — edit anything, changes go live instantly');
+  root.appendChild(c);
+  state.products.forEach(function(p, idx){
+    var box = document.createElement('div'); box.className = 'prod';
+    var head = document.createElement('div'); head.className = 'prod-head';
+    var img = document.createElement('img'); img.src = p.img || ''; img.alt = '';
+    var tt = document.createElement('b'); tt.innerHTML = '<span class="num">/// 0' + (idx+1) + '</span> ' + esc(p.name);
+    head.appendChild(img); head.appendChild(tt);
+    box.appendChild(head);
+
+    var g = grid('g4');
+    g.appendChild(fieldText('Name', function(){ return p.name; }, function(v){ p.name = v; tt.innerHTML = '<span class="num">/// 0' + (idx+1) + '</span> ' + esc(v); }));
+    g.appendChild(fieldSelect('Category', p.cat, ['Running','Lifestyle','Court','Limited'], function(v){ p.cat = v; }));
+    g.appendChild(fieldText('Tag / badge', function(){ return p.tag; }, function(v){ p.tag = v; }));
+    g.appendChild(fieldNumber('Price ($)', function(){ return p.price; }, function(v){ p.price = v; }));
+    g.appendChild(fieldNumber('Old price ($, blank = no discount)', function(){ return p.old; }, function(v){ p.old = v; }, { allowNull:true }));
+    g.appendChild(fieldNumber('Rating (0–5)', function(){ return p.rating; }, function(v){ p.rating = v; }, { step:0.1, min:0 }));
+    g.appendChild(fieldNumber('Review count', function(){ return p.reviews; }, function(v){ p.reviews = v; }));
+    g.appendChild(fieldNumber('Edition size (blank = not limited)', function(){ return p.editionSize == null ? '' : p.editionSize; }, function(v){ p.editionSize = v; }, { allowNull:true }));
+    box.appendChild(g);
+
+    box.appendChild(fieldText('Description (shown in quick-view)', function(){ return p.desc; }, function(v){ p.desc = v; }, { area:true }));
+
+    var ig = grid('g2');
+    var imgField = fieldText('Image URL', function(){ return p.img; }, function(v){ p.img = v; img.src = v; }, { hint:'Tip: pick from the dropdown or paste any image URL.' });
+    var inp = imgField.querySelector('input');
+    var dl = document.createElement('datalist'); dl.id = 'imgs-' + idx;
+    IMAGE_CHOICES.forEach(function(u){ var o = document.createElement('option'); o.value = u; dl.appendChild(o); });
+    inp.setAttribute('list', dl.id); imgField.appendChild(dl);
+    ig.appendChild(imgField);
+
+    var cw = document.createElement('div');
+    var cwT = document.createElement('label'); cwT.className = 'f'; cwT.innerHTML = '<span>Colourways (name + swatch)</span>';
+    cw.appendChild(cwT);
+    (p.colorways || []).forEach(function(cwItem){
+      var row = document.createElement('div'); row.className = 'cw-row';
+      var nameInp = document.createElement('input'); nameInp.type = 'text'; nameInp.value = cwItem.name;
+      nameInp.addEventListener('input', function(){ cwItem.name = nameInp.value; markDirty(); });
+      var colInp = document.createElement('input'); colInp.type = 'color'; colInp.value = /^#[0-9a-f]{6}$/i.test(cwItem.swatch) ? cwItem.swatch : '#888888';
+      colInp.addEventListener('input', function(){ cwItem.swatch = colInp.value.toUpperCase(); markDirty(); });
+      row.appendChild(nameInp); row.appendChild(colInp);
+      cw.appendChild(row);
+    });
+    ig.appendChild(cw);
+    box.appendChild(ig);
+    c.appendChild(box);
+  });
+}
+
+function buildSections(root){
+  var groups = [
+    ['Collection', ['sections.collectionKicker','Kicker'],['sections.collectionTitle1','Title line 1'],['sections.collectionTitle2','Title line 2 (outline)'],['sections.collectionSub','Sub-text (supports {{stylesLive}})']],
+    ['Lookbook', ['sections.lookbookKicker','Kicker'],['sections.lookbookTitle1','Title word 1'],['sections.lookbookTitle2','Title word 2 (outline)']],
+    ['Street talk / testimonials', ['sections.storiesKicker','Kicker'],['sections.storiesTitle1','Title line 1'],['sections.storiesTitle2','Title line 2']],
+    ['Performance', ['sections.perfKicker','Kicker'],['sections.perfTitle1','Title line 1'],['sections.perfTitle2','Title line 2'],['sections.perfSub','Sub-text (supports {{testedAthletes}})'],['sections.perfCta','Button text']],
+    ['Tech intro', ['sections.techKicker','Kicker'],['sections.techTitle1','Title line 1'],['sections.techTitle2','Title line 2 (flame)'],['sections.techSub','Intro paragraph (supports {{labIterationYears}}, {{fieldTestKm}})']]
+  ];
+  groups.forEach(function(grp){
+    var c = card(grp[0]);
+    var g = grid('g2');
+    grp.slice(1).forEach(function(f){
+      var key = f[0], label = f[1];
+      var isLong = /Sub|paragraph/i.test(label);
+      var el = T(key, label, isLong ? { area:true } : null);
+      if (isLong) el.style.gridColumn = '1 / -1';
+      g.appendChild(el);
+    });
+    c.appendChild(g); root.appendChild(c);
+  });
+}
+
+function buildTech(root){
+  var c = card('Technology blocks (3 features)');
+  root.appendChild(c);
+  (state.techImgs || []).forEach(function(t, i){
+    var box = document.createElement('div'); box.className = 'prod';
+    var h = document.createElement('h3'); h.textContent = 'Feature 0' + (i+1); box.appendChild(h);
+    var g = grid('g2');
+    g.appendChild(T('techFeatures.' + i + '.title', 'Feature title'));
+    g.appendChild(fieldText('Image label (bottom-left overlay)', function(){ return t.label; }, function(v){ t.label = v; }));
+    box.appendChild(g);
+    box.appendChild(T('techFeatures.' + i + '.body', 'Description', { area:true }));
+    var g2 = grid('g2');
+    g2.appendChild(T('techFeatures.' + i + '.s1', 'Stat 1 label (value comes from Numbers tab)'));
+    g2.appendChild(T('techFeatures.' + i + '.s2', 'Stat 2 label (value comes from Numbers tab)'));
+    box.appendChild(g2);
+    c.appendChild(box);
+  });
+}
+
+function buildLooks(root){
+  var c = card('Lookbook captions (6 slides)');
+  var g = grid('g3');
+  state.looks.forEach(function(l, i){
+    var w = document.createElement('div');
+    w.appendChild(fieldText('Slide 0' + (i+1) + ' — title', function(){ return l.title; }, function(v){ l.title = v; }));
+    w.appendChild(fieldText('Slide 0' + (i+1) + ' — caption', function(){ return l.sub; }, function(v){ l.sub = v; }));
+    g.appendChild(w);
+  });
+  c.appendChild(g); root.appendChild(c);
+}
+
+function buildReviews(root){
+  var c = card('Testimonials');
+  root.appendChild(c);
+  state.reviews.forEach(function(r, i){
+    var box = document.createElement('div'); box.className = 'prod';
+    var h = document.createElement('h3'); h.textContent = 'Review 0' + (i+1); box.appendChild(h);
+    box.appendChild(fieldText('Quote', function(){ return r.text; }, function(v){ r.text = v; }, { area:true }));
+    var g = grid('g3');
+    g.appendChild(fieldText('Name & role', function(){ return r.name; }, function(v){ r.name = v; }));
+    g.appendChild(fieldText('Meta line', function(){ return r.meta; }, function(v){ r.meta = v; }));
+    var avField = fieldText('Avatar image URL', function(){ return r.avatar; }, function(v){ r.avatar = v; });
+    var avInp = avField.querySelector('input');
+    var dl = document.createElement('datalist'); dl.id = 'av-' + i;
+    IMAGE_CHOICES.forEach(function(u){ var o = document.createElement('option'); o.value = u; dl.appendChild(o); });
+    avInp.setAttribute('list', dl.id); avField.appendChild(dl);
+    g.appendChild(avField);
+    box.appendChild(g);
+    c.appendChild(box);
+  });
+}
+
+function buildClub(root){
+  var c = card('Club / newsletter');
+  var g = grid('g2');
+  g.appendChild(T('sections.clubKicker', 'Kicker'));
+  g.appendChild(T('sections.clubTitle1', 'Title line 1'));
+  g.appendChild(T('sections.clubTitle2', 'Title line 2 (flame box)'));
+  g.appendChild(T('sections.clubSuccess', 'Success message after signup'));
+  c.appendChild(g);
+  c.appendChild(T('sections.clubSub', 'Sub-text (supports {{membersTeaser}})', { area:true }));
+  root.appendChild(c);
+
+  c = card('Footer');
+  g = grid('g2');
+  g.appendChild(T('footer.blurb', 'Footer blurb', { area:true }));
+  g.appendChild(T('footer.copy', 'Copyright line'));
+  g.appendChild(T('footer.tagline', 'Tagline'));
+  c.appendChild(g); root.appendChild(c);
+}
+
+function buildNumbers(root){
+  var c = card('Marketing numbers (drive every stat on the page)');
+  var labels = {
+    runners:'Runners trusting the plate', members:'Club members (exact)', membersTeaser:'Members teaser (rounded)',
+    averageRating:'Average rating', testedAthletes:'Tested athletes', stylesLive:'Styles live',
+    totalReviews:'Total reviews', wouldRebuyPercent:'Would rebuy %', labIterationYears:'Lab iteration years',
+    fieldTestKm:'Field-test km', energyReturnPercent:'Energy return %', plateDropMm:'Plate drop (mm)',
+    productWeightGrams:'Weight (g)', airflowDegrees:'Airflow (°)', impactAbsorptionMultiplier:'Shock absorb ×',
+    testedLifeKm:'Tested life (km)', weightReductionPercent:'Weight reduction %', impactAbsorptionPercent:'Impact absorption %',
+    durabilityIndexPercent:'Durability index %'
+  };
+  var g = grid('g4');
+  Object.keys(labels).forEach(function(k){
+    var opts = { step: (['averageRating','plateDropMm','impactAbsorptionMultiplier'].indexOf(k) !== -1) ? 0.1 : 1 };
+    g.appendChild(fieldNumber(labels[k], function(){ return state.marketing[k]; }, function(v){ state.marketing[k] = v; }, opts));
+  });
+  c.appendChild(g); root.appendChild(c);
+
+  c = card('Commerce');
+  g = grid('g4');
+  g.appendChild(fieldNumber('Free shipping threshold ($)', function(){ return (state.commerce.freeShippingThresholdCents == null ? '' : state.commerce.freeShippingThresholdCents / 100); }, function(v){ state.commerce.freeShippingThresholdCents = (v == null || v === '') ? null : Math.round(Number(v) * 100); }));
+  g.appendChild(fieldNumber('Shipping cost ($)', function(){ return (state.commerce.shippingCents == null ? '' : state.commerce.shippingCents / 100); }, function(v){ state.commerce.shippingCents = (v == null || v === '') ? null : Math.round(Number(v) * 100); }));
+  g.appendChild(fieldText('Promo code', function(){ return state.commerce.promoCode; }, function(v){ state.commerce.promoCode = v; }));
+  g.appendChild(fieldNumber('Promo discount %', function(){ return state.commerce.promoPercent; }, function(v){ state.commerce.promoPercent = v; }));
+  c.appendChild(g);
+  var hint = document.createElement('p'); hint.className = 'hint';
+  hint.textContent = 'Tip: per-product review counts are edited in the Products tab and synced automatically on save.';
+  c.appendChild(hint);
+  root.appendChild(c);
+}
+
+/* ---------- load / save via GitHub ---------- */
+var dirty = false;
+function markDirty(){ dirty = true; }
+
+function currentPayload(){
+  var out = clone(state);
+  out.marketing = out.marketing || {};
+  out.marketing.productReviewCounts = out.marketing.productReviewCounts || {};
+  (out.products || []).forEach(function(p, i){
+    var key = REVIEW_COUNT_KEYS[i];
+    if (key && isFinite(Number(p.reviews))) out.marketing.productReviewCounts[key] = Number(p.reviews);
+  });
+  return out;
+}
+
+function loadFromGitHub(){
+  return fetch(API + repoPath() + '?ref=' + encodeURIComponent(GH.branch || 'main'), { headers: ghHeaders(true), cache: 'no-store' })
+    .then(function(r){
+      if (r.status === 404) return {};           // no content.json yet -> defaults
+      if (!r.ok) return r.json().catch(function(){ return {}; }).then(function(j){ throw new Error((j && j.message) || ('GitHub error ' + r.status)); });
+      return r.json();
+    });
+}
+
+function saveToGitHub(payload, msg){
+  // 1) get current sha (file may not exist yet)
+  return fetch(API + repoPath() + '?ref=' + encodeURIComponent(GH.branch || 'main'), { headers: ghHeaders(false), cache: 'no-store' })
+    .then(function(r){
+      if (r.status === 404) return null;
+      if (!r.ok) return r.json().catch(function(){ return {}; }).then(function(j){ throw new Error((j && j.message) || ('GitHub error ' + r.status)); });
+      return r.json();
+    })
+    .then(function(meta){
+      var body = {
+        message: msg || 'Update site content (KINETIC admin)',
+        content: toBase64(JSON.stringify(payload)),
+        branch: GH.branch || 'main'
+      };
+      if (meta && meta.sha) body.sha = meta.sha;
+      return fetch(API + repoPath(), {
+        method: 'PUT',
+        headers: Object.assign({ 'Content-Type': 'application/json' }, ghHeaders(false)),
+        body: JSON.stringify(body)
+      }).then(function(r){
+        return r.json().catch(function(){ return {}; }).then(function(j){
+          if (!r.ok) throw new Error((j && j.message) || ('GitHub error ' + r.status));
+          return j;
+        });
+      });
+    });
+}
+
+function save(reset){
+  var btn = $('#saveBtn'); btn.disabled = true;
+  status(reset ? 'Resetting…' : 'Saving to GitHub…');
+  var payload = reset ? clone(DEFAULTS) : currentPayload();
+  saveToGitHub(payload, reset ? 'Reset site content to defaults (KINETIC admin)' : undefined)
+    .then(function(){
+      btn.disabled = false;
+      dirty = false;
+      if (reset) { state = clone(DEFAULTS); buildTabs(); }
+      var when = new Date().toLocaleString();
+      localStorage.setItem('kinetic-last-saved', when);
+      $('#lastSaved').textContent = 'Saved ' + when;
+      status(reset ? '✓ Reset — content.json committed, live shortly' : '✓ Saved — content.json committed. Live for visitors within seconds.');
+    })
+    .catch(function(e){
+      btn.disabled = false;
+      status('Save failed: ' + e.message, true);
+      if (/token|auth|credentials/i.test(e.message)) { sessionStorage.removeItem('kinetic-gh-token'); showGate(); }
+    });
+}
+
+$('#saveBtn').addEventListener('click', function(){ save(false); });
+$('#resetBtn').addEventListener('click', function(){
+  if (confirm('Reset ALL content back to the original defaults? This overwrites your saved edits.')) save(true);
+});
+
+function init(){
+  $('#repoLabel').textContent = GH.owner !== 'OWNER_PLACEHOLDER' ? (GH.owner + '/' + GH.repo) : '';
+  if (GH.owner && GH.owner !== 'OWNER_PLACEHOLDER') {
+    $('#viewSiteBtn').href = 'https://' + GH.owner + '.github.io/' + GH.repo + '/';
+  }
+  loadFromGitHub().then(function(saved){
+    state = mergeContent(DEFAULTS, saved);
+    buildTabs();
+    var when = localStorage.getItem('kinetic-last-saved');
+    if (when) $('#lastSaved').textContent = 'Saved ' + when;
+    status('Ready. Edit anything, then hit “Save & publish”.');
+  }).catch(function(e){
+    state = clone(DEFAULTS);
+    buildTabs();
+    status('GitHub se load nahi ho saka (' + e.message + ') — defaults dikha raha hu. Token permissions check karein (Contents: Read & Write).', true);
+  });
+}
+
+window.addEventListener('beforeunload', function(e){
+  if (dirty) { e.preventDefault(); e.returnValue = ''; }
+});
+
+if (!GH.owner || GH.owner === 'OWNER_PLACEHOLDER') {
+  $('#gateErr').textContent = '';
+  $('#gate').querySelector('p').innerHTML = '<b style="color:var(--flame)">GitHub repo abhi configure nahi hua.</b> assets/kinetic-gh-config.js mein owner/repo set karein.';
+  showGate();
+} else if (token) {
+  hideGate();
+  verifyToken(token).then(function(res){
+    if (res.status === 200 && res.body && res.body.login) { init(); }
+    else { token = ''; localStorage.removeItem('kinetic-gh-token'); showGate(); }
+  }).catch(function(){ showGate(); });
+} else {
+  showGate();
+}
+})();
+</script>
+</body>
+</html>
