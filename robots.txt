@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+
+Sitemap: https://huzaifasyed469432-coder.github.io/kinetic/sitemap.xml
