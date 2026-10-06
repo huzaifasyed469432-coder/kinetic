@@ -108,13 +108,13 @@ var GH = window.__GH__ || {};
 var API = 'https://api.github.com';
 var REVIEW_COUNT_KEYS = ['voltageProCarbon','apex01Racer','monolithHigh','strikeCourtLo','infernoTiltCarbon','nebulaRunner','shadowKnit','retro85Carbon'];
 var IMAGE_CHOICES = [
-  '/assets/images/40a470397f3ef7b7.jpg','/assets/images/01c31163ece2a19f.jpg','/assets/images/2c53504d2430d75e.jpg',
-  '/assets/images/5916e42350811ca9.jpg','/assets/images/81ef1d14c54de2f1.jpg','/assets/images/eb01e5bab3a80e98.jpg',
-  '/assets/images/407e125ad12a7343.jpg','/assets/images/7e7afef3a68aab55.jpg','/assets/images/e325ae933be2eb0a.jpg',
-  '/assets/images/31cc6f2be8488145.jpg','/assets/images/7ec35cfc4888c347.jpg','/assets/images/11073cb2ab9c627b.jpg',
-  '/assets/images/3c382aa6d2a3c175.jpg','/assets/images/68fa9dff96eb4be2.jpg','/assets/images/fb10e562f94a80bc.jpg',
-  '/assets/images/3376a541498e8878.jpg','/assets/images/ef928fbb81a95a94.jpg','/assets/images/0aa80a56f46b796a.jpg',
-  '/assets/images/793473e10624e6a6.jpg'
+  'assets/images/40a470397f3ef7b7.jpg','assets/images/01c31163ece2a19f.jpg','assets/images/2c53504d2430d75e.jpg',
+  'assets/images/5916e42350811ca9.jpg','assets/images/81ef1d14c54de2f1.jpg','assets/images/eb01e5bab3a80e98.jpg',
+  'assets/images/407e125ad12a7343.jpg','assets/images/7e7afef3a68aab55.jpg','assets/images/e325ae933be2eb0a.jpg',
+  'assets/images/31cc6f2be8488145.jpg','assets/images/7ec35cfc4888c347.jpg','assets/images/11073cb2ab9c627b.jpg',
+  'assets/images/3c382aa6d2a3c175.jpg','assets/images/68fa9dff96eb4be2.jpg','assets/images/fb10e562f94a80bc.jpg',
+  'assets/images/3376a541498e8878.jpg','assets/images/ef928fbb81a95a94.jpg','assets/images/0aa80a56f46b796a.jpg',
+  'assets/images/793473e10624e6a6.jpg'
 ];
 
 var state = null;
@@ -259,6 +259,10 @@ function buildTabs(){
     if (i === 0) { b.classList.add('active'); s.classList.add('active'); }
   });
 }
+function refreshProductsPanel(){
+  var panel = $('#panel-products');
+  if (panel) { panel.innerHTML = ''; buildProducts(panel); }
+}
 function activate(id){
   document.querySelectorAll('nav.tabs button').forEach(function(b){ b.classList.toggle('active', b.dataset.tab === id); });
   document.querySelectorAll('section.panel').forEach(function(p){ p.classList.toggle('active', p.id === 'panel-' + id); });
@@ -302,6 +306,28 @@ function buildTicker(root){
 
 function buildProducts(root){
   var c = card('Products — edit anything, changes go live instantly');
+  var addBtn = document.createElement('button');
+  addBtn.className = 'btn btn-gold';
+  addBtn.style.marginBottom = '16px';
+  addBtn.textContent = '➕ Add new product';
+  addBtn.addEventListener('click', function(){
+    var nextId = 0;
+    state.products.forEach(function(p){ if (Number(p.id) >= nextId) nextId = Number(p.id) + 1; });
+    state.products.push({
+      id: nextId, name: 'New Product ' + (nextId + 1), cat: 'Running', tag: 'New',
+      price: 150, old: null, rating: 4.5, reviews: 0,
+      desc: 'Describe your new product here.', img: IMAGE_CHOICES[0],
+      colorways: [
+        { name: 'Inferno Red', swatch: '#D71920' },
+        { name: 'Midnight Black', swatch: '#08080A' },
+        { name: 'Warm Cream', swatch: '#F5F0EA' }
+      ]
+    });
+    markDirty();
+    refreshProductsPanel();
+    status('Naya product add ho gaya — fields edit karein phir Save & publish dabayen.');
+  });
+  c.appendChild(addBtn);
   root.appendChild(c);
   state.products.forEach(function(p, idx){
     var box = document.createElement('div'); box.className = 'prod';

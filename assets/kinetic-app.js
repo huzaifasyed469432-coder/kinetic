@@ -117,7 +117,22 @@ var PRODUCTS = [
   { id:6, name:'Shadow Knit', cat:'Lifestyle', price:160, old:null, tag:'New', rating:4.6, reviews:KINETIC_CONFIG.marketing.productReviewCounts.shadowKnit, img:'assets/images/407e125ad12a7343.jpg', colors:['#08080A','#3A3A40','#D4AF37'], colorways:[{name:'Midnight Black',swatch:'#08080A'}, {name:'Graphite',swatch:'#3A3A40'}, {name:'Flame Gold',swatch:'#D4AF37'}], desc:'A stealth everyday silhouette in matte knit with a sock-like fit. Disappears into any fit — until it hits the light.' },
   { id:7, name:'Retro 85 Carbon', cat:'Court', price:220, old:265, tag:'Archive', rating:4.9, reviews:KINETIC_CONFIG.marketing.productReviewCounts.retro85Carbon, img:'assets/images/7e7afef3a68aab55.jpg', colors:['#D4AF37','#08080A','#F5F0EA'], colorways:[{name:'Flame Gold',swatch:'#D4AF37'}, {name:'Midnight Black',swatch:'#08080A'}, {name:'Warm Cream',swatch:'#F5F0EA'}], desc:'The 1985 legend, remastered with modern cushioning. Vintage shape, full-grain upper, zero nostalgia fatigue.' }
 ];
-/* KINETIC live-content: apply saved product edits over the PRODUCTS array */
+/* KINETIC live-content: apply saved product edits + new products over the PRODUCTS array */
+function __kineticMergeProduct(p,s){
+  var n={}; for(var k in p) n[k]=p[k];
+  ['name','cat','tag','desc','img'].forEach(function(f){ if(typeof s[f]==='string'&&s[f].trim()!=='') n[f]=s[f].trim(); });
+  if('price' in s){ var pr=Number(s.price); if(isFinite(pr)&&pr>=0) n.price=pr; }
+  if('old' in s){ n.old=(s.old===null||s.old==='')?null:Number(s.old); if(!isFinite(n.old)) n.old=null; }
+  if('rating' in s){ var rt=Number(s.rating); if(isFinite(rt)&&rt>=0&&rt<=5) n.rating=rt; }
+  if('reviews' in s){ var rv=Number(s.reviews); if(isFinite(rv)&&rv>=0) n.reviews=rv; }
+  if('editionSize' in s){ n.editionSize=(s.editionSize===null||s.editionSize==='')?null:Number(s.editionSize); if(!isFinite(n.editionSize)) n.editionSize=null; }
+  if(Array.isArray(s.colorways)&&s.colorways.length){
+    var cw=s.colorways.filter(function(c){ return c&&typeof c.swatch==='string'&&/^#[0-9a-f]{6}$/i.test(c.swatch); })
+      .map(function(c){ return {name:String(c.name||'').trim(),swatch:c.swatch.toUpperCase()}; });
+    if(cw.length){ n.colorways=cw; n.colors=cw.map(function(c){ return c.swatch; }); }
+  }
+  return n;
+}
 try{
   var __KP=(window.__KINETIC_CONTENT__||{}).products;
   if(Array.isArray(__KP)){
@@ -125,21 +140,20 @@ try{
       var s=null;
       for(var i=0;i<__KP.length;i++){ if(__KP[i]&&String(__KP[i].id)===String(p.id)){ s=__KP[i]; break; } }
       if(!s) return p;
-      var n={}; for(var k in p) n[k]=p[k];
-      ['name','cat','tag','desc','img'].forEach(function(f){
-        if(typeof s[f]==='string'&&s[f].trim()!=='') n[f]=s[f].trim();
-      });
-      if('price' in s){ var pr=Number(s.price); if(isFinite(pr)&&pr>=0) n.price=pr; }
-      if('old' in s){ n.old=(s.old===null||s.old==='')?null:Number(s.old); if(!isFinite(n.old)) n.old=null; }
-      if('rating' in s){ var rt=Number(s.rating); if(isFinite(rt)&&rt>=0&&rt<=5) n.rating=rt; }
-      if('reviews' in s){ var rv=Number(s.reviews); if(isFinite(rv)&&rv>=0) n.reviews=rv; }
-      if('editionSize' in s){ n.editionSize=(s.editionSize===null||s.editionSize==='')?null:Number(s.editionSize); if(!isFinite(n.editionSize)) n.editionSize=null; }
-      if(Array.isArray(s.colorways)&&s.colorways.length){
-        var cw=s.colorways.filter(function(c){ return c&&typeof c.swatch==='string'&&/^#[0-9a-f]{6}$/i.test(c.swatch); })
-          .map(function(c){ return {name:String(c.name||'').trim(),swatch:c.swatch.toUpperCase()}; });
-        if(cw.length){ n.colorways=cw; n.colors=cw.map(function(c){ return c.swatch; }); }
-      }
-      return n;
+      return __kineticMergeProduct(p,s);
+    });
+    /* add brand-new products (ids not in the built-in list) */
+    __KP.forEach(function(s){
+      if(!s) return;
+      var id=Number(s.id);
+      if(!isFinite(id)) return;
+      var exists=PRODUCTS.some(function(p){ return String(p.id)===String(id); });
+      if(exists) return;
+      var base={ id:id, name:'New Product', cat:'Running', tag:'New', price:150, old:null, rating:4.5, reviews:0,
+        img:'assets/images/40a470397f3ef7b7.jpg', desc:'',
+        colorways:[{name:'Midnight Black',swatch:'#08080A'}], colors:['#08080A'] };
+      var np=__kineticMergeProduct(base,s);
+      if(isValidProduct(np)) PRODUCTS.push(np);
     });
   }
 }catch(__kpErr){}

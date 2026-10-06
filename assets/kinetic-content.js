@@ -55,31 +55,38 @@
         else { var n = Number(v); if (isFinite(n)) out.commerce[k] = n; }
       });
     }
-    if (Array.isArray(saved.products)) {
-      out.products = (out.products || []).map(function (p) {
-        var s = null;
-        for (var i = 0; i < saved.products.length; i++) {
-          if (saved.products[i] && String(saved.products[i].id) === String(p.id)) { s = saved.products[i]; break; }
-        }
-        if (!s) return p;
-        var m = deepCopy(p);
+    if (Array.isArray(saved.products) && saved.products.length) {
+      var baseById = {};
+      (out.products || []).forEach(function (p) { baseById[String(p.id)] = p; });
+      function blankProduct(id) {
+        return {
+          id: id, name: 'New Product', cat: 'Running', tag: 'New',
+          price: 150, old: null, rating: 4.5, reviews: 0,
+          img: 'assets/images/40a470397f3ef7b7.jpg', desc: '',
+          colorways: [{ name: 'Midnight Black', swatch: '#08080A' }], colors: ['#08080A']
+        };
+      }
+      out.products = saved.products.map(function (s) {
+        var id = Number(s && s.id);
+        if (!isFinite(id)) return null;
+        var m = baseById[String(id)] ? deepCopy(baseById[String(id)]) : blankProduct(id);
         ['name', 'cat', 'tag', 'desc', 'img'].forEach(function (f) {
-          if (typeof s[f] === 'string' && s[f].trim() !== '') m[f] = s[f].trim();
+          if (s && typeof s[f] === 'string' && s[f].trim() !== '') m[f] = s[f].trim();
         });
         ['price', 'old', 'rating', 'reviews', 'editionSize'].forEach(function (f) {
-          if (!(f in s)) return;
+          if (!s || !(f in s)) return;
           if (s[f] === null || s[f] === '') { if (f === 'old' || f === 'editionSize') m[f] = null; return; }
           var n = Number(s[f]);
           if (isFinite(n) && n >= 0) m[f] = n;
         });
-        if (Array.isArray(s.colorways) && s.colorways.length) {
+        if (s && Array.isArray(s.colorways) && s.colorways.length) {
           var cw = s.colorways
             .filter(function (c) { return c && typeof c.swatch === 'string' && /^#[0-9a-f]{6}$/i.test(c.swatch); })
             .map(function (c) { return { name: String(c.name || '').trim(), swatch: c.swatch.toUpperCase() }; });
           if (cw.length) { m.colorways = cw; m.colors = cw.map(function (c) { return c.swatch; }); }
         }
         return m;
-      });
+      }).filter(Boolean);
     }
     ['reviews', 'looks', 'techImgs'].forEach(function (key) {
       if (!Array.isArray(saved[key])) return;
