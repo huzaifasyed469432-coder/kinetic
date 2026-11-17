@@ -70,9 +70,32 @@
         var id = Number(s && s.id);
         if (!isFinite(id)) return null;
         var m = baseById[String(id)] ? deepCopy(baseById[String(id)]) : blankProduct(id);
-        ['name', 'cat', 'tag', 'desc', 'img'].forEach(function (f) {
+        ['name', 'cat', 'tag', 'desc', 'img', 'sku'].forEach(function (f) {
           if (s && typeof s[f] === 'string' && s[f].trim() !== '') m[f] = s[f].trim();
         });
+        /* ---- fields added by the admin dashboard ---- */
+        if (s && (s.status === 'draft' || s.status === 'active')) m.status = s.status;
+        if (s && 'featured' in s) m.featured = !!s.featured;
+        if (s && Array.isArray(s.sizes) && s.sizes.length) {
+          m.sizes = s.sizes.map(function (x) { return String(x); })
+            .filter(function (x, i, arr) { return x.trim() !== '' && arr.indexOf(x) === i; });
+        }
+        if (s && s.stock && typeof s.stock === 'object' && !Array.isArray(s.stock)) {
+          var stockMap = {};
+          Object.keys(s.stock).forEach(function (k) {
+            var q = parseInt(s.stock[k], 10);
+            if (isFinite(q) && q >= 0) stockMap[String(k)] = q;
+          });
+          m.stock = Object.keys(stockMap).length ? stockMap : null;
+        } else if (s && typeof s.stock === 'number' && isFinite(s.stock) && s.stock >= 0) {
+          m.stock = Math.floor(s.stock);
+        }
+        if (s && Array.isArray(s.specs) && s.specs.length) {
+          m.specs = s.specs.map(function (row) {
+            if (Array.isArray(row)) return [String(row[0] || ''), String(row[1] || '')];
+            return [String((row && row.label) || ''), String((row && row.value) || '')];
+          });
+        }
         ['price', 'old', 'rating', 'reviews', 'editionSize'].forEach(function (f) {
           if (!s || !(f in s)) return;
           if (s[f] === null || s[f] === '') { if (f === 'old' || f === 'editionSize') m[f] = null; return; }
@@ -88,6 +111,15 @@
         return m;
       }).filter(Boolean);
     }
+    /* categories, coupons and dashboard settings travel with the content file */
+    ['categories', 'coupons'].forEach(function (key) {
+      if (!Array.isArray(saved[key])) return;
+      out[key] = deepCopy(saved[key]);
+    });
+    if (isPlainObject(saved.settings)) {
+      out.settings = Object.assign({}, isPlainObject(out.settings) ? out.settings : {}, saved.settings);
+    }
+
     ['reviews', 'looks', 'techImgs'].forEach(function (key) {
       if (!Array.isArray(saved[key])) return;
       out[key] = saved[key].map(function (item, i) {
@@ -163,9 +195,12 @@
   function loadSaved() {
     var g = gh();
     if (!g) return Promise.resolve(null);
-    // 1) GitHub API (fresh), 2) raw.githubusercontent (cached CDN), 3) localStorage
-    return fetchJson(apiRawUrl(g), { 'Accept': 'application/vnd.github.raw+json' })
-      .catch(function () { return fetchJson(rawUrl(g), { 'Accept': 'application/json' }); })
+    /* 1) raw.githubusercontent (CDN, no rate limit), 2) the GitHub contents API
+       (fresh but anonymous callers are capped at 60 requests/hour per address,
+       so it is the fallback rather than the first try), 3) localStorage.
+       The self-hosted API stays the source of truth for the shop itself. */
+    return fetchJson(rawUrl(g), { 'Accept': 'application/json' })
+      .catch(function () { return fetchJson(apiRawUrl(g), { 'Accept': 'application/vnd.github.raw+json' }); })
       .catch(function () { var c = cacheRead(); if (c) return c; throw new Error('no-source'); })
       .then(function (json) {
         if (isPlainObject(json)) { cacheWrite(json); return json; }

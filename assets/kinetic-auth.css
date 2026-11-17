@@ -1,0 +1,322 @@
+/* ============================================================================
+   KINETIC® — Account & authentication surface
+   Shares the checkout shell's language (ink #0b0b0d, cards #111113, gold
+   #d4af37, cream #f5f0ea, Space Grotesk mono + Anton display) so the account
+   area reads as part of the shop, not a bolt-on.
+   All selectors are namespaced `ka-` and scoped to #authView / .ka-* so
+   nothing here can leak into the existing pages.
+   ========================================================================= */#authView{
+  position: fixed;
+  inset: 0;
+  z-index: 89;
+  background: #0b0b0d;
+  color: #f5f0ea;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(14px);
+  transition: opacity .34s ease, transform .46s cubic-bezier(.16, 1, .3, 1), visibility .34s;
+}#authView.open{ opacity: 1; visibility: visible; transform: none; }body.ka-locked{ overflow: hidden; }#authView .ka-wrap{ max-width: 1180px; margin: 0 auto; padding: 0 20px 110px; }
+@media (min-width: 1024px) {#authView .ka-wrap{ padding: 0 40px 130px; } }#authView /* ------------------------------------------------------------------- topbar */
+.ka-bar{
+  position: sticky; top: 0; z-index: 30;
+  background: rgba(8, 8, 10, .93);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(212, 175, 55, .26);
+}#authView .ka-bar-in{
+  max-width: 1180px; margin: 0 auto; padding: 13px 20px;
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+}
+@media (min-width: 1024px) {#authView .ka-bar-in{ padding: 16px 40px; } }#authView .ka-logo{
+  font-family: Anton, Impact, sans-serif; font-size: 25px; line-height: 1;
+  letter-spacing: .02em; text-transform: uppercase;
+  flex: 0 1 auto; min-width: 0;
+}#authView .ka-logo span{ color: #d4af37; }#authView .ka-bar-meta{
+  display: flex; align-items: center; gap: 12px;
+  font-family: "Space Grotesk", "Courier New", monospace; font-size: 10.5px;
+  letter-spacing: .2em; text-transform: uppercase; color: rgba(245, 240, 234, .55);
+}#authView .ka-x{
+  display: inline-flex; align-items: center; gap: 9px; flex: 0 0 auto; white-space: nowrap;
+  min-height: 44px; padding: 0 14px;
+  border: 1px solid rgba(212, 175, 55, .5); background: transparent; color: #f5f0ea;
+  font-family: "Space Grotesk", "Courier New", monospace; font-size: 10.5px;
+  letter-spacing: .18em; text-transform: uppercase; font-weight: 700; cursor: pointer;
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
+}#authView .ka-x:hover{ background: #d4af37; color: #08080a; border-color: #d4af37; }#authView /* ------------------------------------------------------------ auth screens */
+.ka-auth{
+  display: grid; place-items: start center;
+  padding: 42px 0 60px;
+}
+@media (min-width: 1024px) {#authView .ka-auth{ padding: 72px 0 80px; } }#authView .ka-panel{
+  width: 100%; max-width: 520px;
+  background: #111113;
+  border: 1px solid rgba(212, 175, 55, .26);
+  padding: 26px 22px 30px;
+  position: relative;
+}
+@media (min-width: 640px) {#authView .ka-panel{ padding: 38px 36px 40px; } }#authView .ka-panel::before{
+  content: ""; position: absolute; left: 0; top: 0; width: 62px; height: 3px; background: #d4af37;
+}#authView .ka-eyebrow{
+  font-family: "Space Grotesk", "Courier New", monospace; font-size: 10.5px;
+  letter-spacing: .3em; text-transform: uppercase; color: #d4af37;
+}#authView .ka-h1{
+  font-family: Anton, Impact, sans-serif; font-size: clamp(2rem, 8vw, 2.9rem);
+  line-height: .98; letter-spacing: .01em; text-transform: uppercase; margin: 12px 0 8px;
+}#authView .ka-sub{ font-size: 14px; line-height: 1.6; color: rgba(245, 240, 234, .62); max-width: 42ch; }#authView .ka-sub a{ color: #d4af37; text-decoration: underline; text-underline-offset: 3px; }#authView /* a wide panel for the reset / verify steps */
+.ka-panel--wide{ max-width: 620px; }#authView /* -------------------------------------------------------------------- form */
+.ka-form{ margin-top: 24px; display: grid; gap: 16px; }#authView .ka-field{ display: grid; gap: 8px; }#authView .ka-2{ display: grid; gap: 16px; }
+@media (min-width: 560px) {#authView .ka-2{ grid-template-columns: 1fr 1fr; } }#authView .ka-lbl{
+  font-family: "Space Grotesk", "Courier New", monospace; font-size: 11px;
+  letter-spacing: .16em; text-transform: uppercase; font-weight: 700;
+  color: rgba(245, 240, 234, .72);
+}#authView .ka-lbl .ka-req{ color: #d4af37; margin-left: 4px; }#authView .ka-in{
+  width: 100%; min-height: 52px; padding: 14px 15px;
+  background: #0a0a0c; color: #f5f0ea;
+  border: 1px solid rgba(212, 175, 55, .34);
+  font-family: inherit; font-size: 16px; line-height: 1.3;
+  transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}#authView .ka-in::placeholder{ color: rgba(245, 240, 234, .34); }#authView .ka-in:hover{ border-color: rgba(212, 175, 55, .55); }#authView .ka-in:focus{
+  outline: none; border-color: #d4af37; background: #0d0d10;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, .16);
+}#authView .ka-in[aria-invalid="true"]{ border-color: #e0654f; box-shadow: 0 0 0 3px rgba(224, 101, 79, .14); }#authView .ka-in:disabled{ opacity: .55; cursor: not-allowed; }#authView select.ka-in{ -webkit-appearance: none; appearance: none; background-image: linear-gradient(45deg, transparent 50%, #d4af37 50%), linear-gradient(135deg, #d4af37 50%, transparent 50%); background-position: calc(100% - 19px) 24px, calc(100% - 13px) 24px; background-size: 6px 6px, 6px 6px; background-repeat: no-repeat; padding-right: 40px; }#authView .ka-hint{ font-size: 12.5px; line-height: 1.5; color: rgba(245, 240, 234, .45); }#authView .ka-err{
+  font-size: 12.5px; line-height: 1.45; color: #f0857a; min-height: 0;
+}#authView .ka-err:empty{ display: none; }#authView .ka-ok{ font-size: 12.5px; line-height: 1.45; color: #7fd6a1; }#authView .ka-msg{
+  display: none; align-items: flex-start; gap: 10px;
+  padding: 12px 14px; margin-top: 4px; font-size: 13px; line-height: 1.5;
+  border: 1px solid rgba(212, 175, 55, .4); background: rgba(212, 175, 55, .08);
+}#authView .ka-msg.show{ display: flex; }#authView .ka-msg.is-error{ border-color: rgba(224, 101, 79, .55); background: rgba(224, 101, 79, .1); color: #f4b2a8; }#authView .ka-msg.is-success{ border-color: rgba(127, 214, 161, .45); background: rgba(127, 214, 161, .08); color: #a9e6c1; }#authView .ka-msg b{ color: inherit; }#authView /* password reveal + strength */
+.ka-passwrap{ position: relative; }#authView .ka-passwrap .ka-in{ padding-right: 62px; }#authView .ka-reveal{
+  position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
+  min-width: 44px; min-height: 44px;
+  background: transparent; border: 0; color: rgba(245, 240, 234, .6);
+  font-family: "Space Grotesk", "Courier New", monospace; font-size: 10px;
+  letter-spacing: .1em; text-transform: uppercase; font-weight: 700; cursor: pointer;
+}#authView .ka-reveal:hover{ color: #d4af37; }#authView .ka-strength{ display: flex; align-items: center; gap: 10px; margin-top: 2px; }#authView .ka-strength-bars{ display: flex; gap: 4px; flex: 0 0 auto; }#authView .ka-strength-bars i{ display: block; width: 34px; height: 4px; background: rgba(245, 240, 234, .16); }#authView .ka-strength[data-level="1"] .ka-strength-bars i:nth-child(-n+1){ background: #e0654f; }#authView .ka-strength[data-level="2"] .ka-strength-bars i:nth-child(-n+2){ background: #d4af37; }#authView .ka-strength[data-level="3"] .ka-strength-bars i{ background: #7fd6a1; }#authView .ka-strength-txt{
+  font-family: "Space Grotesk", "Courier New", monospace; font-size: 10.5px;
+  letter-spacing: .16em; text-transform: uppercase; color: rgba(245, 240, 234, .5);
+}#authView .ka-rules{ display: grid; gap: 5px; margin-top: 2px; }#authView .ka-rule{
+  font-size: 12px; color: rgba(245, 240, 234, .42); display: flex; align-items: center; gap: 7px;
+}#authView .ka-rule::before{ content: "○"; font-size: 11px; color: rgba(245, 240, 234, .3); }#authView .ka-rule.on{ color: #a9e6c1; }#authView .ka-rule.on::before{ content: "●"; color: #7fd6a1; }#authView .ka-check{ display: flex; align-items: flex-start; gap: 11px; font-size: 13px; line-height: 1.5; color: rgba(245, 240, 234, .72); }#authView .ka-check input{ width: 22px; height: 22px; margin: 0; flex: 0 0 auto; accent-color: #d4af37; }#authView .ka-check label{ cursor: pointer; }#authView .ka-forgot{ justify-self: end; font-size: 12.5px; color: #d4af37; text-decoration: underline; text-underline-offset: 3px; }#authView /* buttons */
+.ka-btn{
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; min-height: 56px; padding: 0 22px;
+  border: 2px solid #d4af37; background: #d4af37; color: #08080a;
+  font-family: "Space Grotesk", "Courier New", monospace; font-size: 11.5px;
+  letter-spacing: .22em; text-transform: uppercase; font-weight: 700; cursor: pointer;
+  transition: transform .18s ease, background .2s ease, color .2s ease, box-shadow .2s ease;
+  box-shadow: 5px 5px 0 rgba(8, 8, 10, .9);
+}#authView .ka-btn:hover{ transform: translate(-1px, -1px); box-shadow: 7px 7px 0 rgba(8, 8, 10, .9); }#authView .ka-btn:active{ transform: translate(1px, 1px); box-shadow: 3px 3px 0 rgba(8, 8, 10, .9); }#authView .ka-btn[aria-busy="true"],#authView .ka-btn:disabled{ opacity: .72; cursor: progress; transform: none; box-shadow: 4px 4px 0 rgba(8, 8, 10, .9); }#authView .ka-btn-ghost{
+  background: transparent; color: #f5f0ea; border-color: rgba(212, 175, 55, .55); box-shadow: none;
+}#authView .ka-btn-ghost:hover{ background: rgba(212, 175, 55, .12); color: #f2d273; transform: none; box-shadow: none; }#authView .ka-btn-dark{ background: #111113; color: #f5f0ea; border-color: rgba(245, 240, 234, .28); box-shadow: none; }#authView .ka-btn-dark:hover{ background: #1a1a1f; color: #f2d273; border-color: #d4af37; transform: none; box-shadow: none; }#authView .ka-btn-sm{ min-height: 44px; font-size: 10.5px; letter-spacing: .18em; padding: 0 16px; width: auto; }#authView .ka-actions-row{ display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 6px; }#authView /* spinner */
+.ka-auth-spin{
+  width: 15px; height: 15px; flex: 0 0 auto; border-radius: 50%;
+  border: 2px solid rgba(8, 8, 10, .35); border-top-color: #08080a;
+  animation: ka-auth-spin .7s linear infinite; display: none;
+}#authView .ka-btn[aria-busy="true"] .ka-auth-spin{ display: block; }#authView .ka-btn-ghost .ka-auth-spin,#authView .ka-btn-dark .ka-auth-spin{ border-color: rgba(245, 240, 234, .3); border-top-color: #d4af37; }
+@keyframes ka-auth-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {#authView .ka-auth-spin{ animation-duration: 2.2s; } }#authView .ka-alt{
+  margin-top: 22px; padding-top: 20px; border-top: 1px solid rgba(245, 240, 234, .12);
+  font-size: 13px; color: rgba(245, 240, 234, .6); text-align: center;
+}#authView .ka-alt a,#authView .ka-alt button.ka-link{
+  color: #d4af37; text-decoration: underline; text-underline-offset: 3px;
+  background: none; border: 0; font: inherit; cursor: pointer; padding: 0;
+}#authView .ka-trust{
+  display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 20px; padding-top: 18px;
+  border-top: 1px solid rgba(245, 240, 234, .1);
+  font-family: "Space Grotesk", "Courier New", monospace; font-size: 10.5px;
+  letter-spacing: .14em; text-transform: uppercase; color: rgba(245, 240, 234, .4);
+}#authView /* the one-time reset code */
+.ka-code{
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  margin: 6px 0 4px; padding: 16px 18px;
+  background: linear-gradient(135deg, #15151a, #241e0b 70%, #3d300b);
+  border: 1px solid rgba(212, 175, 55, .5);
+}#authView .ka-code b{
+  font-family: "Space Grotesk", "Courier New", monospace; font-size: clamp(1.5rem, 7vw, 2rem);
+  letter-spacing: .34em; color: #f2d273; word-break: break-all;
+}#authView .ka-note{
+  margin-top: 14px; padding: 12px 14px; font-size: 12.5px; line-height: 1.55;
+  border-left: 2px solid rgba(212, 175, 55, .5); background: rgba(212, 175, 55, .06);
+  color: rgba(245, 240, 234, .66);
+}#authView .ka-note b{ color: #f2d273; }#authView /* --------------------------------------------------------------- dashboard */
+.ka-head{ padding: 34px 0 26px; }#authView .ka-head-row{ display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 18px; }#authView .ka-hello{
+  font-family: Anton, Impact, sans-serif; text-transform: uppercase;
+  font-size: clamp(1.9rem, 7.4vw, 3rem); line-height: 1; margin-top: 10px;
+}#authView .ka-hello em{ color: #d4af37; font-style: normal; }#authView .ka-who{
+  font-family: "Space Grotesk", "Courier New", monospace; font-size: 11px;
+  letter-spacing: .18em; text-transform: uppercase; color: rgba(245, 240, 234, .5);
+  margin-top: 12px;
+}#authView .ka-who b{ color: #f5f0ea; }#authView .ka-layout{ display: grid; gap: 24px; align-items: start; }
+@media (min-width: 1024px) {#authView .ka-layout{ grid-template-columns: 264px minmax(0, 1fr); gap: 42px; } }#authView .ka-nav{ display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }#authView .ka-nav::-webkit-scrollbar{ display: none; }
+@media (min-width: 1024px) {#authView .ka-nav{ flex-direction: column; overflow: visible; gap: 0; border: 1px solid rgba(212, 175, 55, .22); background: #111113; padding: 0; }
+}#authView .ka-nav button{
+  flex: 0 0 auto; display: flex; align-items: center; gap: 11px;
+  min-height: 46px; padding: 0 15px;
+  background: #111113; border: 1px solid rgba(212, 175, 55, .22); color: rgba(245, 240, 234, .74);
+  font-family: "Space Grotesk", "Courier New", monospace; font-size: 11px;
+  letter-spacing: .16em; text-transform: uppercase; font-weight: 700; cursor: pointer;
+  transition: background .18s ease, color .18s ease, border-color .18s ease;
+  white-space: nowrap;
+}
+@media (min-width: 1024px) {#authView .ka-nav button{ border: 0; border-bottom: 1px solid rgba(245, 240, 234, .08); width: 100%; min-height: 52px; justify-content: flex-start; }#authView .ka-nav button:last-child{ border-bottom: 0; }
+}#authView .ka-nav button:hover{ color: #f2d273; border-color: rgba(212, 175, 55, .5); }#authView .ka-nav button.is-on{ background: #d4af37; color: #08080a; border-color: #d4af37; }#authView .ka-nav button.is-on .ka-nav-n{ color: rgba(8, 8, 10, .7); }#authView .ka-nav-n{
+  margin-left: auto; font-size: 10.5px; color: rgba(245, 240, 234, .45);
+  font-variant-numeric: tabular-nums;
+}#authView .ka-nav svg{ width: 15px; height: 15px; flex: 0 0 auto; }#authView .ka-body{ min-width: 0; display: grid; gap: 20px; }#authView .ka-card{
+  background: #111113; border: 1px solid rgba(212, 175, 55, .24); padding: 22px 20px;
+}
+@media (min-width: 768px) {#authView .ka-card{ padding: 28px 26px; } }#authView .ka-card-h{ display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 20px; }#authView .ka-card-t{
+  font-family: Anton, Impact, sans-serif; text-transform: uppercase;
+  font-size: clamp(1.25rem, 4.6vw, 1.6rem); line-height: 1; letter-spacing: .01em;
+}#authView .ka-card-s{ font-family: "Space Grotesk", "Courier New", monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: rgba(245, 240, 234, .5); margin-top: 7px; }#authView /* stat tiles */
+.ka-stats{ display: grid; gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 768px) {#authView .ka-stats{ grid-template-columns: repeat(4, minmax(0, 1fr)); } }#authView .ka-stat{
+  border: 1px solid rgba(212, 175, 55, .22); background: #0e0e11; padding: 16px 15px;
+  display: grid; gap: 7px; min-width: 0;
+}#authView .ka-stat-k{ font-family: "Space Grotesk", "Courier New", monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: rgba(245, 240, 234, .5); }#authView .ka-stat-v{ font-family: Anton, Impact, sans-serif; font-size: 1.75rem; line-height: 1; }#authView .ka-stat.is-gold .ka-stat-v{ color: #d4af37; }#authView /* definition rows (profile summary) */
+.ka-rows{ display: grid; }#authView .ka-row{
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 18px;
+  padding: 15px 0; border-bottom: 1px solid rgba(245, 240, 234, .09);
+}#authView .ka-row:last-child{ border-bottom: 0; }#authView .ka-row-k{ font-family: "Space Grotesk", "Courier New", monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: rgba(245, 240, 234, .5); }#authView .ka-row-v{ font-size: 14.5px; text-align: right; min-width: 0; flex: 1 1 auto; overflow-wrap: break-word; }#authView .ka-row-v.is-empty{ color: rgba(245, 240, 234, .38); font-style: italic; }#authView /* order list */
+.ka-orders{ display: grid; gap: 14px; }#authView .ka-order{ border: 1px solid rgba(212, 175, 55, .22); background: #0e0e11; }#authView .ka-order-top{
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 16px 17px; border-bottom: 1px solid rgba(245, 240, 234, .08);
+}#authView .ka-order-no{ font-family: "Space Grotesk", "Courier New", monospace; font-size: 13.5px; letter-spacing: .12em; color: #f2d273; }#authView .ka-order-date{ font-size: 12.5px; color: rgba(245, 240, 234, .5); margin-top: 5px; }#authView .ka-order-mid{ display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center; padding: 15px 17px; }#authView .ka-order-thumbs{ display: flex; gap: 8px; flex: 0 0 auto; }#authView .ka-order-thumbs span{
+  width: 52px; height: 52px; display: block; overflow: hidden;
+  border: 1px solid rgba(245, 240, 234, .18); background: #15151a;
+}#authView .ka-order-thumbs img{ width: 100%; height: 100%; object-fit: cover; display: block; }#authView .ka-order-thumbs em{
+  width: 52px; height: 52px; display: grid; place-items: center;
+  border: 1px dashed rgba(245, 240, 234, .25); font-style: normal;
+  font-family: "Space Grotesk", "Courier New", monospace; font-size: 11px; color: rgba(245, 240, 234, .6);
+}#authView .ka-order-sum{ text-align: right; margin-left: auto; }#authView .ka-order-sum b{ font-family: Anton, Impact, sans-serif; font-size: 1.35rem; display: block; }#authView .ka-order-sum i{ font-style: normal; font-size: 11.5px; color: rgba(245, 240, 234, .5); }#authView .ka-order-foot{ display: flex; flex-wrap: wrap; gap: 10px; padding: 0 17px 17px; }#authView .ka-order-foot .ka-btn{ width: auto; }#authView .pill{
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 6px 11px; border: 1px solid currentColor;
+  font-family: "Space Grotesk", "Courier New", monospace; font-size: 10px;
+  letter-spacing: .16em; text-transform: uppercase; font-weight: 700; white-space: nowrap;
+}#authView .pill::before{ content: ""; width: 6px; height: 6px; background: currentColor; border-radius: 50%; }#authView .pill-paid,#authView .pill-delivered{ color: #7fd6a1; }#authView .pill-unpaid,#authView .pill-awaiting{ color: #f2d273; }#authView .pill-refunded,#authView .pill-cancelled{ color: #f0857a; }#authView .pill-neutral{ color: rgba(245, 240, 234, .6); }#authView .pills{ display: flex; flex-wrap: wrap; gap: 8px; }#authView /* order detail */
+.ka-lines{ display: grid; gap: 0; }#authView .ka-line{
+  display: grid; grid-template-columns: 62px minmax(0, 1fr) auto; gap: 14px;
+  padding: 15px 0; border-bottom: 1px solid rgba(245, 240, 234, .09); align-items: start;
+}#authView .ka-line:first-child{ padding-top: 0; }#authView .ka-line:last-child{ border-bottom: 0; padding-bottom: 0; }#authView .ka-line-img{ width: 62px; height: 62px; overflow: hidden; border: 1px solid rgba(245, 240, 234, .16); background: #15151a; }#authView .ka-line-img img{ width: 100%; height: 100%; object-fit: cover; display: block; }#authView .ka-line-name{ font-weight: 800; font-size: 14px; line-height: 1.35; }#authView .ka-line-meta{ font-family: "Space Grotesk", "Courier New", monospace; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: rgba(245, 240, 234, .5); margin-top: 6px; }#authView .ka-line-price{ text-align: right; font-family: Anton, Impact, sans-serif; font-size: 1.15rem; }#authView .ka-line-qty{ font-family: "Space Grotesk", "Courier New", monospace; font-size: 11px; color: rgba(245, 240, 234, .5); margin-top: 5px; text-align: right; }#authView .ka-totals{ margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(212, 175, 55, .28); display: grid; gap: 10px; }#authView .ka-total-row{ display: flex; justify-content: space-between; gap: 14px; font-size: 13.5px; }#authView .ka-total-row span:first-child{ color: rgba(245, 240, 234, .6); }#authView .ka-total-row.is-grand{ padding-top: 11px; border-top: 1px solid rgba(245, 240, 234, .12); font-family: Anton, Impact, sans-serif; font-size: 1.5rem; }#authView .ka-total-row.is-grand span:first-child{ color: #f5f0ea; font-family: inherit; }#authView .ka-timeline{ display: grid; gap: 0; margin-top: 6px; }#authView .ka-tl{ display: flex; gap: 12px; align-items: flex-start; padding: 9px 0; }#authView .ka-tl-dot{ width: 9px; height: 9px; flex: 0 0 auto; background: rgba(245, 240, 234, .3); margin-top: 6px; }#authView .ka-tl.is-done .ka-tl-dot{ background: #d4af37; }#authView .ka-tl-t{ font-size: 13.5px; }#authView .ka-tl-w{ font-family: "Space Grotesk", "Courier New", monospace; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: rgba(245, 240, 234, .45); margin-top: 4px; }#authView /* addresses */
+.ka-addrs{ display: grid; gap: 14px; }
+@media (min-width: 768px) {#authView .ka-addrs{ grid-template-columns: repeat(2, minmax(0, 1fr)); } }#authView .ka-addr{ border: 1px solid rgba(212, 175, 55, .22); background: #0e0e11; padding: 18px 17px; display: grid; gap: 8px; }#authView .ka-addr.is-default{ border-color: #d4af37; }#authView .ka-addr-top{ display: flex; align-items: center; justify-content: space-between; gap: 10px; }#authView .ka-addr-l{ font-family: "Space Grotesk", "Courier New", monospace; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: #d4af37; }#authView .ka-addr-n{ font-weight: 800; font-size: 14.5px; }#authView .ka-addr p{ font-size: 13.5px; line-height: 1.6; color: rgba(245, 240, 234, .68); }#authView .ka-addr-btns{ display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }#authView .ka-addr-form{ border: 1px dashed rgba(212, 175, 55, .4); padding: 18px 17px; background: #0d0d10; }#authView /* wishlist / recently viewed grid */
+.ka-grid2{ display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }#authView .ka-prod{ border: 1px solid rgba(212, 175, 55, .22); background: #0e0e11; display: grid; }#authView .ka-prod-img{ aspect-ratio: 3 / 2; overflow: hidden; background: #15151a; }#authView .ka-prod-img img{ width: 100%; height: 100%; object-fit: cover; display: block; }#authView .ka-prod-body{ padding: 13px 13px 15px; display: grid; gap: 7px; }#authView .ka-prod-name{ font-weight: 800; font-size: 13.5px; line-height: 1.35; }#authView .ka-prod-meta{ font-family: "Space Grotesk", "Courier New", monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: rgba(245, 240, 234, .48); }#authView .ka-prod-price{ font-family: Anton, Impact, sans-serif; font-size: 1.25rem; }#authView .ka-prod .ka-btn{ min-height: 44px; font-size: 10px; letter-spacing: .16em; box-shadow: none; }#authView /* empty states */
+.ka-empty{ padding: 30px 6px; text-align: center; display: grid; gap: 12px; justify-items: center; }#authView .ka-empty-mark{
+  font-family: Anton, Impact, sans-serif; text-transform: uppercase;
+  font-size: clamp(2.2rem, 12vw, 3.4rem); line-height: .95; color: rgba(245, 240, 234, .14);
+}#authView .ka-empty p{ font-size: 13.5px; line-height: 1.65; color: rgba(245, 240, 234, .6); max-width: 44ch; }#authView .ka-empty .ka-btn{ width: auto; }#authView /* skeleton shimmer while a section loads */
+.ka-skel{ display: grid; gap: 12px; }#authView .ka-skel i{
+  display: block; height: 62px; background: linear-gradient(100deg, #131317 30%, #1c1c22 50%, #131317 70%);
+  background-size: 220% 100%; animation: ka-auth-shim 1.15s linear infinite;
+}#authView .ka-skel i:nth-child(2){ height: 46px; }#authView .ka-skel i:nth-child(3){ height: 78px; }
+@keyframes ka-auth-shim { from { background-position: 130% 0; } to { background-position: -30% 0; } }
+@media (prefers-reduced-motion: reduce) {#authView .ka-skel i{ animation-duration: 3s; } }#authView .ka-sr{
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+/* the header account button (injected next to the bag) — lives in #siteHeader,
+   so it must NOT be scoped to #authView */
+#accountBtn { position: relative; }
+#accountBtn .ka-avatar{
+  width: 24px; height: 24px; display: grid; place-items: center;
+  background: #d4af37; color: #08080a; border-radius: 999px;
+  font-family: "Space Grotesk", "Courier New", monospace; font-size: 10px; font-weight: 800;
+  letter-spacing: .02em;
+}
+#accountBtn.has-user { color: #f2d273; }
+#accountBtn.has-user::after{
+  content: ""; position: absolute; top: 5px; right: 5px;
+  width: 7px; height: 7px; border-radius: 50%; background: #7fd6a1;
+  box-shadow: 0 0 0 2px #08080a;
+}
+@media (max-width: 344px) {
+  /* 320px cannot hold five 44px targets + the wordmark, so the account entry
+     lives in the mobile menu at this size only */
+  #accountBtn { display: none !important; }
+}
+/* menu entry (mobile) — lives in #mobileMenu, so it is scoped to that */
+#mobileMenu .ka-menulink{
+  display: flex !important; align-items: center; justify-content: space-between;
+  gap: 12px; width: 100%; min-height: 56px; padding: 0 24px;   /* matches the menu's px-6 */
+  border-top: 1px solid rgba(245, 240, 234, .12);
+  color: #f5f0ea; font-size: 15px; font-weight: 600;
+}
+#mobileMenu .ka-menulink .ka-menulink-k{
+  font-family: "Space Grotesk", "Courier New", monospace; font-size: 10px;
+  letter-spacing: .16em; text-transform: uppercase; color: rgba(245, 240, 234, .5);
+}
+ /* mobile: the account surface is one column and the nav scrolls */
+@media (max-width: 1023px){
+  #authView .ka-head { padding: 24px 0 18px; }
+  #authView .ka-card { padding: 20px 16px; }
+  #authView .ka-order-mid { flex-direction: column; align-items: flex-start; }
+  #authView .ka-order-sum { margin-left: 0; text-align: left; }
+  #authView .ka-line { grid-template-columns: 54px minmax(0, 1fr); }
+  #authView .ka-line-img { width: 54px; height: 54px; }
+  #authView .ka-line-price { text-align: left; grid-column: 2; }
+  #authView .ka-line-qty { text-align: left; }
+}
+@media (max-width: 430px) {#authView .ka-2{ grid-template-columns: 1fr; }#authView .ka-wrap{ padding: 0 16px calc(96px + env(safe-area-inset-bottom, 0px)); }#authView .ka-bar-in{ padding: 11px 16px; }#authView .ka-logo{ font-size: 21px; }#authView .ka-auth{ padding: 26px 0 40px; }#authView .ka-panel{ padding: 24px 16px 26px; }#authView .ka-stat-v{ font-size: 1.5rem; }#authView .ka-grid2{ grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+}
+@media (max-width: 360px) {#authView .ka-stats{ grid-template-columns: 1fr; }#authView .ka-row-v{ text-align: left; width: 100%; }
+}
+@media print {#authView .ka-nav,#authView .ka-bar{ display: none !important; }
+}#authView /* ---------------------------------------------------- checkout account chip */
+.ko-account{
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px;
+  padding: 13px 15px; margin-bottom: 18px;
+  border: 1px solid rgba(212, 175, 55, .4);
+  background: linear-gradient(135deg, #15151a, #241e0b 78%, #3d300b);
+  font-size: 13.5px;
+}.ko-account-k{
+  font-family: "Space Grotesk", "Courier New", monospace; font-size: 10px;
+  letter-spacing: .2em; text-transform: uppercase; color: rgba(245, 240, 234, .55);
+}.ko-account b{ color: #f2d273; }.ko-account-e{ color: rgba(245, 240, 234, .6); }.ko-account-b{
+  margin-left: auto; min-height: 44px; padding: 0 12px;
+  background: none; border: 1px solid rgba(245, 240, 234, .28); color: #f5f0ea;
+  font-family: "Space Grotesk", "Courier New", monospace; font-size: 10px;
+  letter-spacing: .16em; text-transform: uppercase; font-weight: 700; cursor: pointer;
+}.ko-account-b:hover{ border-color: #d4af37; color: #f2d273; }
+/* narrow phones: the top bar drops its redundant label, and definition rows stack
+   so long emails and addresses are never squeezed into two-letter lines */
+@media (max-width: 560px) {
+  #authView .ka-bar .ka-bar-meta { display: none; }
+  #authView .ka-row { flex-direction: column; align-items: flex-start; gap: 6px; }
+  #authView .ka-row-v { text-align: left; }
+  #authView .ka-addr p, #authView .ka-line-name, #authView .ka-prod-name { overflow-wrap: break-word; }
+}
+@media (max-width: 430px) {#authView .ka-x{ padding: 0 11px; gap: 7px; font-size: 10px; letter-spacing: .14em; }
+}
+
+/* ---------------------------------------------------------------- §  collides
+   The owner dashboard (kinetic-admin.js) injects GLOBAL styles for a handful of
+   the same class names (.ka-btn .ka-card .ka-in .ka-field .ka-x .ka-sub …).
+   Everything above wins inside #authView through specificity, but a property
+   this sheet never declares would still leak in — so the two or three that
+   actually differ are pinned here, once, explicitly. */
+#authView .ka-card { display: block; }                    /* admin makes it flex */
+#authView .ka-field { margin-bottom: 0; }
+#authView .ka-note { margin: 0; }
+#authView .ka-sub { font-family: inherit; font-size: 14px; letter-spacing: 0; text-transform: none; margin: 0; }
+#authView .ka-x { width: auto; height: auto; }            /* admin pins 38×38 */
+#authView .ka-2 { grid-template-columns: 1fr; }
+#authView .ka-hint { font-family: inherit; }
+@media (min-width: 560px) { #authView .ka-2 { grid-template-columns: 1fr 1fr; } }
+
+#authView .ka-head-out { flex: 0 0 auto; align-self: flex-start; margin-left: auto; }
+@media (max-width: 560px) {
+  /* hello left, sign out right, "signed in as" on its own line beneath */
+  #authView .ka-head-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 14px; align-items: start; }
+  #authView .ka-head-out { grid-column: 2; grid-row: 1; margin: 0; }
+  #authView .ka-who { grid-column: 1 / -1; grid-row: 2; }
+}
+
+/* mobile menu entry — matches the 11px floor the rest of #mobActions follows */
+@media (max-width: 430px) {
+  /* same specificity as the rule above, later in the file, so the floor wins */
+  #mobileMenu .ka-menulink .ka-menulink-k { font-size: 11px; }
+  #mobileMenu .ka-menulink .ka-menulink-v { font-size: 13.5px; }
+}

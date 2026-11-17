@@ -1,0 +1,492 @@
+/* ==========================================================================
+   KINETIC® — collection search & filtering layer
+   Stylesheet for assets/kinetic-shop-filters.js
+   Every class is prefixed "kflt-" and builds on the existing KINETIC tokens:
+   ink #08080A · panel #111113 · flame #D4AF37 · flame-light #F2D273 · cream #F5F0EA
+   The collection section keeps its own dark palette — nothing here restyles it.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------- toolbar */
+.kflt-toolbar{
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+  margin-top:22px;
+}
+.kflt-search{
+  position:relative;flex:1 1 260px;min-width:0;display:flex;align-items:center;
+  background:#111113;border:1.5px solid rgba(212,175,55,.34);
+  transition:border-color .3s cubic-bezier(.16,1,.3,1),box-shadow .3s ease;
+}
+.kflt-search:focus-within{border-color:#d4af37;box-shadow:6px 6px 0 rgba(212,175,55,.16)}
+.kflt-search svg{position:absolute;left:14px;width:15px;height:15px;color:rgba(212,175,55,.75);pointer-events:none}
+.kflt-search input{
+  width:100%;background:transparent;border:0;outline:none;color:#f5f0ea;
+  font-family:"Courier New",monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  padding:13px 40px 13px 40px;
+}
+.kflt-search input::placeholder{color:rgba(245,240,234,.3);letter-spacing:.14em;text-transform:uppercase}
+.kflt-search .kflt-clear{
+  position:absolute;right:8px;width:26px;height:26px;display:none;place-items:center;
+  background:transparent;border:1px solid rgba(212,175,55,.34);color:#f2d273;font-size:13px;line-height:1;
+  transition:background .2s,color .2s,border-color .2s;
+}
+.kflt-search.has-value .kflt-clear{display:grid}
+.kflt-search .kflt-clear:hover{background:#d4af37;color:#08080a;border-color:#d4af37}
+
+.kflt-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:0 16px;height:46px;min-width:46px;background:#111113;color:#f5f0ea;
+  border:1.5px solid rgba(212,175,55,.4);
+  font-family:"Courier New",monospace;font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  cursor:pointer;white-space:nowrap;
+  transition:all .35s cubic-bezier(.16,1,.3,1);
+}
+.kflt-btn:hover{background:#1a1a1f;color:#f2d273;border-color:#d4af37}
+.kflt-btn:focus-visible{outline:2px solid #d4af37;outline-offset:3px}
+.kflt-btn[aria-expanded="true"],.kflt-btn.is-on{background:#d4af37;color:#08080a;border-color:#d4af37}
+.kflt-btn .kflt-count{
+  display:inline-grid;place-items:center;min-width:19px;height:19px;padding:0 4px;
+  background:#d4af37;color:#08080a;font-size:10px;letter-spacing:0;
+}
+.kflt-btn.is-on .kflt-count,.kflt-btn[aria-expanded="true"] .kflt-count{background:#08080a;color:#d4af37}
+.kflt-btn.ghost{background:transparent}
+.kflt-btn.sm{height:38px;padding:0 13px;font-size:10px}
+.kflt-btn:disabled{opacity:.45;cursor:default}
+
+/* filters button: rail toggle on desktop, drawer on mobile */
+.kflt-filtersbtn{display:inline-flex}
+@media(min-width:1024px){
+  .kflt-filtersbtn .kflt-mobile-only{display:none}
+}
+@media(max-width:1023px){
+  .kflt-filtersbtn .kflt-desktop-only{display:none}
+}
+
+/* --------------------------------------------------------------- result bar */
+.kflt-status{
+  display:flex;flex-wrap:wrap;align-items:center;gap:14px;
+  margin-top:14px;font-family:"Courier New",monospace;font-size:10px;
+  letter-spacing:.2em;text-transform:uppercase;color:rgba(245,240,234,.5);
+}
+.kflt-status b{color:#f2d273;letter-spacing:.2em}
+.kflt-status .kflt-statusmsg{display:inline-flex;align-items:center;gap:8px}
+.kflt-status .kflt-dot{width:6px;height:6px;background:#d4af37;display:inline-block;animation:kfltPulse 1.4s ease-in-out infinite}
+@keyframes kfltPulse{0%,100%{opacity:.25}50%{opacity:1}}
+
+/* progress line while the grid updates */
+.kflt-progress{
+  position:relative;height:2px;margin-top:12px;background:rgba(212,175,55,.16);overflow:hidden;
+  opacity:0;transition:opacity .25s ease;
+}
+/* the status line, the chips and the progress bar each own a full row of the toolbar */
+.kflt-toolbar > #kfltStatusHost,
+.kflt-toolbar > .kflt-chips,
+.kflt-toolbar > .kflt-progress{flex:1 1 100%;width:100%;min-width:0}
+.kflt-toolbar > .kflt-chips{margin-top:14px}
+.kflt-toolbar > .kflt-progress{margin-top:10px}
+.kflt-progress.on{opacity:1}
+.kflt-progress i{
+  position:absolute;top:0;bottom:0;left:0;width:35%;background:#d4af37;
+  animation:kfltSweep .9s cubic-bezier(.6,.05,.3,.95) infinite;
+}
+@keyframes kfltSweep{0%{left:-38%}100%{left:100%}}
+
+/* ------------------------------------------------------------------- chips */
+.kflt-chips{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:16px}
+.kflt-chips:empty{display:none}
+.kflt-chiplabel{
+  font-family:"Courier New",monospace;font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(245,240,234,.42);margin-right:2px;
+}
+.kflt-chip{
+  display:inline-flex;align-items:center;gap:9px;height:34px;padding:0 11px;
+  background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.5);color:#f5f0ea;
+  font-family:"Courier New",monospace;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  cursor:pointer;transition:all .3s cubic-bezier(.16,1,.3,1);
+}
+.kflt-chip .kflt-chipx{color:#d4af37;font-size:12px;line-height:1;transition:transform .3s}
+.kflt-chip:hover{border-color:#d4af37;background:rgba(212,175,55,.2)}
+.kflt-chip:hover .kflt-chipx{transform:rotate(90deg)}
+.kflt-chip.swatch{padding-left:8px}
+.kflt-chip .kflt-chipdot{width:13px;height:13px;border:1px solid rgba(245,240,234,.5);flex:0 0 auto}
+.kflt-clearall{
+  background:transparent;border:0;border-bottom:1.5px solid rgba(212,175,55,.6);color:#f2d273;
+  font-family:"Courier New",monospace;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  padding:2px 0;cursor:pointer;transition:color .25s,border-color .25s;
+}
+.kflt-clearall:hover{color:#fff;border-color:#fff}
+
+/* -------------------------------------------------------------------- rail */
+.kflt-layout{display:grid;grid-template-columns:1fr;gap:0;margin-top:0}
+@media(min-width:1024px){
+  .kflt-layout{
+    grid-template-columns:268px minmax(0,1fr);
+    column-gap:34px;align-items:start;
+    margin-top:34px;
+  }
+  .kflt-layout.kflt-rail-off{grid-template-columns:minmax(0,1fr)}
+}
+.kflt-railwrap{display:none}
+@media(min-width:1024px){
+  .kflt-railwrap{display:block;position:sticky;top:132px;padding-top:26px;max-height:calc(100vh - 156px);overflow:auto;overscroll-behavior:contain;
+    scrollbar-width:thin;scrollbar-color:rgba(212,175,55,.5) transparent;padding-right:4px}
+  .kflt-railwrap::-webkit-scrollbar{width:5px}
+  .kflt-railwrap::-webkit-scrollbar-thumb{background:rgba(212,175,55,.45)}
+  .kflt-layout.kflt-rail-off .kflt-railwrap{display:none}
+}
+.kflt-gridcol{min-width:0}
+
+/* the product grid keeps its own classes — only the column count adapts to the rail */
+.kflt-layout .kflt-grid{margin-top:26px}
+@media(min-width:640px){.kflt-layout .kflt-grid{margin-top:26px}}
+
+/* ------------------------------------------------------------------ facets */
+.kflt-panel{background:#0d0d10;border:1px solid rgba(212,175,55,.22)}
+.kflt-panel + .kflt-panel{margin-top:12px}
+.kflt-panelhead{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;
+  padding:13px 15px;background:transparent;border:0;border-bottom:1px solid rgba(212,175,55,.16);
+  color:#f5f0ea;cursor:pointer;text-align:left;
+}
+.kflt-panelhead .kflt-t{
+  font-family:"Courier New",monospace;font-size:9.5px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#d4af37;
+}
+.kflt-panelhead .kflt-n{font-family:"Courier New",monospace;font-size:9.5px;letter-spacing:.16em;color:rgba(245,240,234,.45)}
+.kflt-panelhead .kflt-n em{font-style:normal;color:#f2d273}
+.kflt-panelhead .kflt-caret{color:rgba(212,175,55,.8);font-size:10px;transition:transform .3s cubic-bezier(.16,1,.3,1)}
+.kflt-panel.closed .kflt-panelhead .kflt-caret{transform:rotate(-90deg)}
+.kflt-panel.closed .kflt-panelbody{display:none}
+.kflt-panelbody{padding:14px 15px 16px}
+
+/* checkbox-style option rows */
+.kflt-opt{
+  display:flex;align-items:center;gap:11px;width:100%;padding:8px 0;background:transparent;border:0;
+  color:rgba(245,240,234,.78);cursor:pointer;text-align:left;
+  font-size:13px;font-weight:600;letter-spacing:.01em;
+  transition:color .25s ease;
+}
+.kflt-opt:hover{color:#fff}
+.kflt-opt .kflt-box{
+  flex:0 0 auto;width:16px;height:16px;border:1.5px solid rgba(212,175,55,.45);
+  display:grid;place-items:center;font-size:10px;color:#08080a;background:transparent;
+  transition:background .2s,border-color .2s;
+}
+.kflt-opt[aria-pressed="true"] .kflt-box{background:#d4af37;border-color:#d4af37}
+.kflt-opt .kflt-lb{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kflt-opt[aria-pressed="true"] .kflt-lb{color:#f2d273}
+.kflt-opt .kflt-num{font-family:"Courier New",monospace;font-size:10px;letter-spacing:.1em;color:rgba(245,240,234,.4)}
+.kflt-opt.is-empty{opacity:.32}
+.kflt-opt.is-empty .kflt-num{color:rgba(255,128,128,.75)}
+
+/* colour swatches */
+.kflt-swatches{display:flex;flex-wrap:wrap;gap:9px}
+.kflt-sw{
+  position:relative;width:38px;height:38px;border:1.5px solid rgba(212,175,55,.35);background:#111113;
+  display:grid;place-items:center;cursor:pointer;padding:0;
+  transition:transform .3s cubic-bezier(.16,1,.3,1),border-color .3s;
+}
+.kflt-sw i{display:block;width:22px;height:22px}
+.kflt-sw:hover{transform:translateY(-3px);border-color:#d4af37}
+.kflt-sw[aria-pressed="true"]{border-color:#d4af37;box-shadow:4px 4px 0 rgba(212,175,55,.35)}
+.kflt-sw.is-empty{opacity:.35}
+.kflt-sw .kflt-swbox{
+  position:absolute;right:-5px;bottom:-5px;width:15px;height:15px;background:#d4af37;color:#08080a;
+  display:none;place-items:center;font-size:9px;font-weight:900;
+}
+.kflt-sw[aria-pressed="true"] .kflt-swbox{display:grid}
+.kflt-swlabels{
+  margin-top:11px;font-family:"Courier New",monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(245,240,234,.5);min-height:14px;
+}
+
+/* sizes */
+.kflt-sizes{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:7px}
+.kflt-size{
+  padding:9px 4px;background:#111113;border:1.5px solid rgba(212,175,55,.3);color:#f5f0ea;cursor:pointer;
+  font-family:"Courier New",monospace;font-size:11px;font-weight:700;letter-spacing:.08em;
+  transition:all .25s cubic-bezier(.16,1,.3,1);
+}
+.kflt-size span{display:block;font-size:8.5px;color:rgba(245,240,234,.4);letter-spacing:.06em;margin-top:3px}
+.kflt-size:hover{border-color:#d4af37;color:#f2d273}
+.kflt-size[aria-pressed="true"]{background:#d4af37;border-color:#d4af37;color:#08080a}
+.kflt-size[aria-pressed="true"] span{color:rgba(8,8,10,.6)}
+.kflt-size.is-empty{opacity:.3}
+.kflt-size.is-empty span{color:rgba(255,128,128,.8)}
+
+/* price range */
+.kflt-rangeval{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  font-family:"Courier New",monospace;font-size:12px;font-weight:700;letter-spacing:.06em;color:#f2d273;
+}
+.kflt-rangeval .kflt-sep{color:rgba(245,240,234,.35)}
+.kflt-dual{position:relative;height:34px;margin-top:12px}
+.kflt-dual .kflt-track{position:absolute;left:0;right:0;top:16px;height:2px;background:rgba(245,240,234,.16)}
+.kflt-dual .kflt-fill{position:absolute;top:16px;height:2px;background:#d4af37}
+.kflt-dual input[type=range]{
+  position:absolute;left:0;top:0;width:100%;height:34px;margin:0;background:transparent;
+  -webkit-appearance:none;appearance:none;pointer-events:none;
+}
+.kflt-dual input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;pointer-events:auto;width:16px;height:16px;
+  background:#d4af37;border:2px solid #08080a;box-shadow:0 0 0 1px rgba(212,175,55,.6);cursor:grab;
+  margin-top:0;
+}
+.kflt-dual input[type=range]::-moz-range-thumb{
+  pointer-events:auto;width:15px;height:15px;background:#d4af37;border:2px solid #08080a;cursor:grab;
+}
+.kflt-dual input[type=range]:focus-visible{outline:none}
+.kflt-dual input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(212,175,55,.35)}
+.kflt-pricetags{
+  display:flex;justify-content:space-between;margin-top:2px;
+  font-family:"Courier New",monospace;font-size:9px;letter-spacing:.16em;color:rgba(245,240,234,.32);
+}
+
+/* ------------------------------------------------------------------- empty */
+.kflt-empty{
+  border:1.5px dashed rgba(212,175,55,.4);background:rgba(17,17,19,.75);
+  padding:44px 24px;text-align:center;
+}
+.kflt-empty .kflt-eh{font-family:Impact,"Arial Black",sans-serif;font-size:clamp(1.6rem,4vw,2.4rem);line-height:1;color:#f5f0ea;letter-spacing:.01em}
+.kflt-empty p{margin-top:12px;font-family:"Courier New",monospace;font-size:11.5px;line-height:1.9;letter-spacing:.1em;color:rgba(245,240,234,.55);text-transform:uppercase}
+.kflt-empty .kflt-eacts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:20px}
+.kflt-empty .kflt-sugg{margin-top:22px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center}
+.kflt-empty .kflt-sugg .kflt-chiplabel{width:100%;text-align:center}
+
+/* skeleton + busy grid */
+.kflt-skelgrid{display:grid;gap:24px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.kflt-skel{background:#111113;border:1.5px solid rgba(212,175,55,.14);overflow:hidden}
+.kflt-skel .kflt-sk-img{height:290px;background:linear-gradient(100deg,#141417 30%,#1b1b20 50%,#141417 70%);background-size:220% 100%;animation:kfltShimmer 1.3s linear infinite}
+.kflt-skel .kflt-sk-body{padding:18px}
+.kflt-skel .kflt-sk-line{height:11px;margin-bottom:11px;background:linear-gradient(100deg,#17171b 30%,#202026 50%,#17171b 70%);background-size:220% 100%;animation:kfltShimmer 1.3s linear infinite}
+.kflt-skel .kflt-sk-line.w60{width:60%}
+.kflt-skel .kflt-sk-line.w40{width:40%}
+@keyframes kfltShimmer{0%{background-position:120% 0}100%{background-position:-20% 0}}
+
+#productGrid.kflt-busy{opacity:.42;transition:opacity .2s ease}
+.kflt-grid-anim{animation:kfltEnter .45s cubic-bezier(.16,1,.3,1) both}
+@keyframes kfltEnter{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+/* -------------------------------------------------------- mobile drawer */
+.kflt-scrim{
+  position:fixed;inset:0;z-index:88;background:rgba(4,4,6,.72);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+  opacity:0;pointer-events:none;transition:opacity .3s ease;
+}
+.kflt-scrim.on{opacity:1;pointer-events:auto}
+.kflt-drawer{
+  position:fixed;top:0;right:0;bottom:0;z-index:89;width:min(430px,93vw);
+  background:#0b0b0e;border-left:3px solid #d4af37;
+  display:flex;flex-direction:column;
+  transform:translateX(102%);transition:transform .38s cubic-bezier(.16,1,.3,1);
+  box-shadow:-24px 0 60px rgba(0,0,0,.55);
+}
+.kflt-drawer.on{transform:none}
+.kflt-drawer .kflt-dhead{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:14px;
+  padding:20px 18px;background:#08080a;border-bottom:1px solid rgba(212,175,55,.24);
+}
+.kflt-drawer .kflt-dhead .kflt-k{font-family:"Courier New",monospace;font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:#d4af37}
+.kflt-drawer .kflt-dhead h2{font-family:Impact,"Arial Black",sans-serif;font-size:1.75rem;line-height:1;color:#f5f0ea;margin-top:6px}
+.kflt-drawer .kflt-dclose{
+  width:40px;height:40px;flex:0 0 auto;background:transparent;border:1px solid rgba(212,175,55,.45);color:#f2d273;
+  font-size:16px;line-height:1;transition:background .2s,color .2s;
+}
+.kflt-drawer .kflt-dclose:hover{background:#d4af37;color:#08080a}
+.kflt-drawer .kflt-dbody{flex:1 1 auto;overflow:auto;overscroll-behavior:contain;padding:16px 18px 26px;-webkit-overflow-scrolling:touch}
+.kflt-drawer .kflt-dfoot{
+  border-top:1px solid rgba(212,175,55,.24);background:#08080a;padding:14px 18px;
+  display:flex;align-items:center;gap:10px;
+}
+.kflt-drawer .kflt-dfoot .kflt-apply{flex:1 1 auto;height:48px}
+.kflt-drawer .kflt-dcount{
+  display:block;margin-top:8px;font-family:"Courier New",monospace;font-size:10px;letter-spacing:.18em;
+  text-transform:uppercase;color:rgba(245,240,234,.5);text-align:center;
+}
+
+/* -------------------------------------------------- search overlay extras */
+.kflt-sec{margin-top:22px}
+.kflt-sechead{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  font-family:"Courier New",monospace;font-size:9.5px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#d4af37;
+  padding-bottom:9px;border-bottom:1px solid rgba(212,175,55,.2);
+}
+.kflt-sechead .kflt-mini{
+  background:transparent;border:0;color:rgba(245,240,234,.45);cursor:pointer;
+  font-family:"Courier New",monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;
+}
+.kflt-sechead .kflt-mini:hover{color:#f2d273}
+.kflt-recents{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}
+.kflt-recent{
+  display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 11px;
+  background:rgba(245,240,234,.05);border:1px solid rgba(245,240,234,.18);color:#f5f0ea;
+  font-family:"Courier New",monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;
+  transition:all .25s;
+}
+.kflt-recent:hover{border-color:#d4af37;color:#f2d273}
+.kflt-recent .kflt-rx{color:rgba(245,240,234,.4);font-size:12px;line-height:1}
+.kflt-recent .kflt-rx:hover{color:#ff8080}
+.kflt-suglist{margin-top:13px;display:grid;gap:8px}
+.kflt-sug{
+  display:flex;align-items:center;gap:14px;width:100%;text-align:left;
+  padding:10px;background:rgba(245,240,234,.04);border:1px solid rgba(245,240,234,.12);
+  color:#f5f0ea;cursor:pointer;transition:border-color .25s,background .25s,transform .25s;
+}
+.kflt-sug:hover,.kflt-sug.active{border-color:#d4af37;background:rgba(212,175,55,.09);transform:translateX(3px)}
+.kflt-sug .kflt-sugimg{width:56px;height:56px;flex:0 0 auto;overflow:hidden;background:#111113}
+.kflt-sug .kflt-sugimg img{width:100%;height:100%;object-fit:cover}
+.kflt-sug .kflt-sugmeta{flex:1 1 auto;min-width:0}
+.kflt-sug .kflt-sugname{
+  display:block;font-weight:900;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.kflt-sug .kflt-sugname mark{background:transparent;color:#f2d273;text-decoration:underline;text-underline-offset:3px}
+.kflt-sug .kflt-sugsub{
+  display:block;margin-top:5px;font-family:"Courier New",monospace;font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;color:rgba(245,240,234,.45);
+}
+.kflt-sug .kflt-sugprice{font-family:"Courier New",monospace;font-size:13px;font-weight:700;color:#f2d273;flex:0 0 auto}
+.kflt-sug .kflt-sugprice s{color:rgba(245,240,234,.35);font-size:11px;margin-right:7px}
+.kflt-sug .kflt-suggo{color:#d4af37;font-size:18px;line-height:1;flex:0 0 auto}
+.kflt-tagrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}
+.kflt-tag{
+  display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 12px;background:transparent;
+  border:1px solid rgba(212,175,55,.4);color:#f5f0ea;cursor:pointer;
+  font-family:"Courier New",monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  transition:all .25s;
+}
+.kflt-tag:hover{background:#d4af37;color:#08080a;border-color:#d4af37}
+.kflt-tag .kflt-tagdot{width:9px;height:9px;background:#d4af37}
+.kflt-tag:hover .kflt-tagdot{background:#08080a}
+.kflt-note{
+  margin-top:18px;font-family:"Courier New",monospace;font-size:10px;letter-spacing:.16em;line-height:1.9;
+  text-transform:uppercase;color:rgba(245,240,234,.4);
+}
+.kflt-nores{
+  margin-top:22px;padding:34px 22px;text-align:center;
+  border:1.5px dashed rgba(212,175,55,.4);background:rgba(17,17,19,.7);
+}
+.kflt-nores .kflt-nrh{font-family:Impact,"Arial Black",sans-serif;font-size:clamp(1.4rem,3.4vw,2rem);line-height:1;color:#f5f0ea}
+.kflt-nores p{margin-top:10px;font-family:"Courier New",monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(245,240,234,.5);line-height:1.9}
+.kflt-nores .kflt-nrq{color:#f2d273}
+
+/* toast */
+.kflt-toast{
+  position:fixed;left:50%;bottom:28px;transform:translate(-50%,120%);z-index:96;
+  background:#08080a;border:1.5px solid #d4af37;border-left-width:4px;color:#f5f0ea;
+  padding:13px 18px;font-family:"Courier New",monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  box-shadow:8px 8px 0 rgba(212,175,55,.24);transition:transform .4s cubic-bezier(.16,1,.3,1);pointer-events:none;
+}
+.kflt-toast.on{transform:translate(-50%,0)}
+/* An empty toast has no message to show: keep it fully off-screen instead of
+   leaving a small empty black box peeking above the bottom edge. */
+#kfltToast:empty{display:none}
+
+/* screen-reader helper (the site has one, but keep this self-contained) */
+.kflt-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+@media(max-width:1023px){
+  .kflt-search{flex:1 1 100%;order:3}
+  .kflt-filtersbtn{order:1}
+  .kflt-sortwrap{order:2;margin-left:auto}
+}
+@media(max-width:640px){
+  .kflt-toolbar{gap:9px}
+  .kflt-btn{height:44px;padding:0 13px;font-size:10px}
+  .kflt-drawer .kflt-dhead h2{font-size:1.5rem}
+  .kflt-empty{padding:32px 16px}
+  .kflt-status{gap:10px;font-size:9.5px}
+  .kflt-sug .kflt-sugimg{width:48px;height:48px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .kflt-skel .kflt-sk-img,.kflt-skel .kflt-sk-line,.kflt-progress i,.kflt-status .kflt-dot{animation:none}
+  .kflt-grid-anim{animation:none}
+  .kflt-drawer,.kflt-scrim,.kflt-toast,.kflt-chip,.kflt-btn{transition:none}
+}
+
+/* the [hidden] attribute must win over the display rules above it */
+#kfltBar [hidden], #kfltRail [hidden], #kfltDrawer [hidden], #kfltChips [hidden] { display: none !important; }
+
+
+/* ======================================================================
+   Collection search — live suggestion panel
+   Sits under the collection toolbar search box. Reuses the overlay's own
+   building blocks (.kflt-sec, .kflt-sug, .kflt-tag, .kflt-recent, .kflt-note)
+   so the new panel is the same material as the rest of the filter layer.
+   ====================================================================== */
+.kflt-searchwrap{position:relative;z-index:5;flex:1 1 260px;min-width:0;display:flex}
+.kflt-searchwrap > .kflt-search{flex:1 1 auto;min-width:0}
+
+.kflt-sugbox{
+  position:absolute;top:calc(100% + 8px);left:0;right:0;z-index:70;
+  max-height:min(62vh,540px);overflow-y:auto;overscroll-behavior:contain;
+  padding:4px 18px 18px;
+  background:#0b0b0e;border:1.5px solid rgba(212,175,55,.45);
+  box-shadow:0 30px 64px -20px rgba(0,0,0,.85), 10px 10px 0 rgba(212,175,55,.12);
+  opacity:0;transform:translateY(-8px);pointer-events:none;
+  transition:opacity .22s cubic-bezier(.16,1,.3,1),transform .3s cubic-bezier(.16,1,.3,1);
+}
+.kflt-sugbox.on{opacity:1;transform:none;pointer-events:auto}
+.kflt-sugbox::-webkit-scrollbar{width:8px}
+.kflt-sugbox::-webkit-scrollbar-track{background:rgba(245,240,234,.04)}
+.kflt-sugbox::-webkit-scrollbar-thumb{background:rgba(212,175,55,.45)}
+.kflt-sugbox::-webkit-scrollbar-thumb:hover{background:#d4af37}
+
+/* the first block in the panel does not need the section's usual breathing room */
+.kflt-sugbox .kflt-sec:first-child{margin-top:16px}
+.kflt-sugbox .kflt-suglist{gap:6px}
+.kflt-sugbox .kflt-note{margin-top:14px;font-size:9.5px}
+.kflt-sugbox .kflt-note b{color:#f2d273}
+.kflt-sugbox .kflt-sechead .kflt-plain{color:rgba(245,240,234,.42);letter-spacing:.18em}
+
+/* product rows are a little tighter than in the full-screen overlay */
+.kflt-sugbox .kflt-sug{padding:9px;gap:12px}
+.kflt-sugbox .kflt-sugimg{width:46px;height:46px}
+.kflt-sugbox .kflt-sugname{font-size:12px}
+.kflt-sugbox .kflt-sugsub{font-size:9.5px;margin-top:4px}
+.kflt-sugbox .kflt-sugprice{font-size:12px}
+
+/* the row filters the collection; the little square opens a quick view */
+.cs-sug{cursor:pointer}
+.kflt-sugview{
+  display:grid;place-items:center;flex:0 0 auto;width:30px;height:30px;
+  border:1px solid rgba(212,175,55,.42);color:#f2d273;font-size:13px;line-height:1;
+  transition:background .25s,color .25s,border-color .25s;
+}
+.kflt-sugview:hover{background:#d4af37;color:#08080a;border-color:#d4af37}
+
+/* keyboard highlight for the compact chips in the panel */
+.kflt-sugbox .kflt-tag.active,
+.kflt-sugbox .kflt-recent.active{background:#d4af37;color:#08080a;border-color:#d4af37}
+.kflt-sugbox .kflt-tag.active .kflt-tagdot{background:#08080a}
+.kflt-sugbox .kflt-tag:focus-visible,
+.kflt-sugbox .kflt-recent:focus-visible,
+.kflt-sugbox .kflt-mini:focus-visible,
+.kflt-sugbox .cs-sug:focus-visible{outline:2px solid #d4af37;outline-offset:2px}
+
+/* the no-results block inside the panel is more compact than the page-level one */
+.kflt-sugbox .kflt-nores{margin-top:16px;padding:24px 18px}
+.kflt-sugbox .kflt-nores .kflt-nrh{font-size:1.2rem}
+
+@media(max-width:1023px){
+  .kflt-sugbox{max-height:min(70vh,460px);padding:2px 14px 14px}
+  .kflt-sugbox .kflt-sug{padding:8px;gap:10px}
+  .kflt-sugbox .kflt-sugimg{width:42px;height:42px}
+  .kflt-sugbox .kflt-sugprice{margin-left:auto}
+  .kflt-sugview{width:28px;height:28px}
+}
+
+
+/* the collection search box owns its own clear control — hide the browser's */
+.kflt-search input[type="search"]::-webkit-search-cancel-button,
+.kflt-search input[type="search"]::-webkit-search-decoration{-webkit-appearance:none;appearance:none;display:none}
+.kflt-search input[type="search"]::-ms-clear{display:none;width:0;height:0}
+
+/* suggestion meta stays on one line on narrow screens */
+@media(max-width:1023px){
+  .kflt-sugbox .kflt-sugsub{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .kflt-sugbox .cs-sug .kflt-sugmeta{min-width:0}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .kflt-sugbox{transition:none;transform:none}
+  .kflt-sugbox .kflt-sug:hover{transform:none}
+}

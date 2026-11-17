@@ -1,0 +1,42 @@
+/* ============================================================================
+   KINETIC® — brand theme
+   ----------------------------------------------------------------------------
+   Loaded after the compiled stylesheet. It re-states the brand colours and
+   font stacks through CSS variables so they can be changed in ONE place:
+   site/kinetic.config.js → brand { … }.
+
+   Nothing to edit here. The defaults in the file above reproduce the shipped
+   look exactly; changing a hex value or a font stack there repaints the whole
+   storefront (buttons, marquee, price accents, wordmark, type).
+   ========================================================================== */
+:root {
+  --k-ink: #08080A;
+  --k-accent: #D4AF37;
+  --k-accent-soft: #F2D273;
+  --k-ember: #B8860B;
+  --k-cream: #F5F0EA;
+  --k-font-body: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --k-font-display: Impact, "Arial Black", system-ui, sans-serif;
+  --k-font-mono: "Courier New", monospace;
+}
+/* type ---------------------------------------------------------------------- */
+body { font-family: var(--k-font-body) !important; }
+.display { font-family: var(--k-font-display) !important; }
+.font-mono2, .label { font-family: var(--k-font-mono) !important; }
+/* surfaces ------------------------------------------------------------------ */
+.bg-ink { background-color: var(--k-ink) !important; }
+.text-ink { color: var(--k-ink) !important; }
+.border-ink { border-color: var(--k-ink) !important; }
+.bg-cream { background-color: var(--k-cream) !important; }
+.text-cream { color: var(--k-cream) !important; }
+/* accents ------------------------------------------------------------------- */
+.bg-flame { background-color: var(--k-accent) !important; }
+.text-flame { color: var(--k-accent) !important; }
+.border-flame { border-color: var(--k-accent) !important; }
+.bg-ember { background-color: var(--k-ember) !important; }
+.text-ember { color: var(--k-ember) !important; }
+.border-ember { border-color: var(--k-ember) !important; }
+.hover\:bg-flame:hover { background-color: var(--k-accent) !important; }
+.hover\:text-flame:hover { color: var(--k-accent) !important; }
+.hover\:border-flame:hover { border-color: var(--k-accent) !important; }
+.hover\:text-ember:hover { color: var(--k-ember) !important; }

@@ -1,0 +1,554 @@
+/* ==========================================================================
+   KINETIC® — mobile & tablet layer
+   Desktop (>=1024px) is untouched: every rule here is scoped to
+   max-width:1023px, with the smallest phones refined at max-width:430px.
+   Nothing is hidden — things are sized, spaced and made touchable.
+   Loaded after every other stylesheet so it can win on specificity.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------- safety net */
+@media (max-width: 1023px) {
+  html { overflow-x: clip; }
+  body { overflow-x: clip; }
+  img, video, svg, canvas { max-width: 100%; }
+  /* long product names / emails never push the layout sideways */
+  h1, h2, h3, h4, p, a, span, li { overflow-wrap: break-word; }
+  .p-card h3, .kp-title, .kflt-name { overflow-wrap: anywhere; }
+  /* the site's own text sizes stay; only unbreakable strings bend */
+  input, select, textarea { min-width: 0; }
+}
+
+/* ------------------------------------------------------- touch targets (≥44) */
+@media (max-width: 1023px) {
+  /* header: logo, search, cart, menu, wishlist */
+  #siteHeader a[href="#top"] {
+    display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;
+    padding: 6px 2px;
+  }
+  /* the icon row's own buttons only — never the spans inside them */
+  #siteHeader .flex.items-center.justify-between > div.flex.items-center > * {
+    min-height: 44px; min-width: 44px;
+  }
+  /* the bag's count chip keeps its brand size (w-6 h-6) */
+  #cartBtn #cartCount { width: auto; min-width: 24px; height: 24px; min-height: 24px; }
+  #searchBtn, #cartBtn, #menuBtn, #wishBtn { min-width: 44px; min-height: 44px; }
+  #menuClose, #searchClose, #cartClose, #modalClose {
+    min-width: 44px !important; min-height: 44px !important;
+  }
+  /* the scrolling news ticker */
+  .ticker-product { min-height: 44px; display: inline-flex; align-items: center; }
+  /* mobile menu links */
+  .mob-link { min-height: 52px; display: flex; align-items: center; }
+  /* quick-view / PDP media controls */
+  .media-nav { width: 46px; height: 46px; min-width: 46px; min-height: 46px; }
+  .media-thumb { flex: 0 0 58px; width: 58px; height: 58px; }
+  #mediaPrev { left: 8px; }
+  #mediaNext { right: 8px; }
+  /* colour swatches: the dot stays small, the tappable area becomes 44px */
+  .color-choice { position: relative; }
+  .color-choice::after {
+    content: ""; position: absolute; top: 50%; left: 50%;
+    width: 44px; height: 44px; transform: translate(-50%, -50%);
+  }
+  /* product card: the ↗ detail link + quick bar buttons */
+  .p-card .full-details { min-width: 44px; min-height: 44px; }
+  .p-card .quick-add, .p-card .quick-view { min-height: 46px; }
+  .card-color-choice { position: relative; }
+  .card-color-choice::after {
+    content: ""; position: absolute; top: 50%; left: 50%;
+    width: 44px; height: 44px; transform: translate(-50%, -50%);
+  }
+  /* cart drawer: quantity + remove */
+  .cart-minus, .cart-plus { width: 44px !important; height: 44px !important; }
+  .cart-remove { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+  #promoApply { min-height: 46px; }
+  #promoInput { min-height: 46px; }
+  #continueBtn { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+  /* PDP: size chips, swatches, buy buttons, gallery thumbs */
+  .kp-size, .kp-swatch-btn, .kp-thumb { min-height: 44px; }
+  .kp-btn { min-height: 50px; }
+  .kp-sticky-buy { min-height: 46px; }
+  /* buttons across the page */
+  .btn, .btn-solid { min-height: 48px; }
+  /* collection filter controls */
+  .filter-btn { min-height: 46px; padding-left: 16px; padding-right: 16px; }
+  .kflt-btn { min-height: 46px; }
+  .kflt-chip { min-height: 38px; }
+  .kflt-opt { min-height: 46px; }
+  .kflt-panelhead { min-height: 48px; }
+  .kflt-drawer .kflt-dclose { width: 44px !important; height: 44px !important; }
+  .kflt-sw { width: 44px; height: 44px; }
+  .kflt-tag, .kflt-recent { min-height: 40px; }
+  .kflt-mini { min-height: 36px; padding: 0 6px; }
+  /* stepper dots: the dot stays tiny, the touch area does not */
+  .tech-dot, .rev-dot { position: relative; }
+  .tech-dot::after, .rev-dot::after {
+    content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    height: 44px;
+  }
+  .tech-dot::after { width: 44px; }
+  .rev-dot::after { width: 100%; min-width: 44px; }
+  /* lookbook CTA */
+  .look-shop { min-height: 46px; }
+  /* PDP + checkout secondary controls measured under 44px */
+  .kp-back, .kp-crumbs a, .kp-crumbs button, .kp-rating-link, .kp-linkbtn {
+    display: inline-flex; align-items: center; min-height: 44px;
+  }
+  #checkoutView .ko-logo, #checkoutView .ko-back {
+    display: inline-flex; align-items: center; min-height: 44px; padding: 4px 2px;
+  }
+  /* footer + newsletter */
+  #newsInput { min-height: 52px; }
+  footer a, footer button { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
+}
+
+/* --------------------------------------------- no iOS zoom + comfy form rows
+   Safari zooms the whole page whenever a focused field is under 16px — that
+   applies to iPads (768) too, so the guard covers every touch width. */
+@media (max-width: 1023px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  select, textarea {
+    font-size: 16px !important;      /* Safari only zooms below 16px */
+  }
+  #promoInput, #checkoutName, #checkoutEmail, #newsInput, #sortSelect, #kfltSearch {
+    height: 48px !important; min-height: 48px;
+  }
+  #sortSelect { padding-left: 12px; padding-right: 12px; }
+  #promoInput, #promoApply { height: 48px; }
+  /* the promo/checkout rows can wrap instead of squeezing */
+  #cartDrawer .flex.items-center:has(#promoInput) { flex-wrap: wrap; }
+  #checkoutName, #checkoutEmail { border-width: 1.5px; }
+  label { line-height: 1.35; }
+}
+
+/* ------------------------------------------------------- readable type floor */
+@media (max-width: 430px) {
+  /* the 10–11px mono labels were tuned for desktop; nudge them up a touch */
+  .label, .font-mono2 { font-size: 11.5px; }
+  .label.text-\[10px\], .text-\[10px\] { font-size: 11px !important; }
+  .text-\[10\.5px\]:not(input):not(select):not(textarea),
+  .text-\[11px\]:not(input):not(select):not(textarea) { font-size: 11.5px !important; }
+  .ticker-product { font-size: 11.5px; }
+  /* body copy breathes */
+  p, li { line-height: 1.62; }
+  /* section rhythm: 80px of air on a 320px screen is too much */
+  section.py-20 { padding-top: 58px; padding-bottom: 58px; }
+  .reveal.mt-10, .reveal.mt-14 { margin-top: 26px; }
+  /* tighter, still premium card padding */
+  .p-card > .p-5 { padding: 14px 14px 16px; }
+  .kflt-toolbar { margin-top: 18px; }
+  .kflt-panelbody { padding: 12px 12px 14px; }
+}
+
+/* ------------------------------------------ clipped/overflowing bits (measured) */
+@media (max-width: 1023px) {
+  /* "Free returns • 2-year warranty • Ships today" clipped at 320–375px */
+  .p-card .font-black.text-\[12px\] { white-space: normal; }
+  #modalProduct, #productModal { --kp-trust-gap: 10px; }
+  .kp-trust, .modal-trust { display: flex; flex-wrap: wrap; gap: 8px 12px; }
+  /* product detail facts row (SKU / sizes / shipping) can wrap */
+  .kp-facts, .kp-meta-row { flex-wrap: wrap; gap: 6px 12px; }
+  /* breadcrumbs + long SKUs wrap instead of clipping */
+  .kp-crumbs, .kp-sku { white-space: normal; overflow-wrap: anywhere; }
+  /* collection header: count + sort label stack instead of running together */
+  #collection .mt-5.flex.items-center.gap-3 { flex-wrap: wrap; row-gap: 8px; }
+  /* checkout summary rows wrap on narrow screens */
+  .ko-row, .ko-summary-row { gap: 6px 12px; flex-wrap: wrap; }
+}
+
+/* ------------------------------------------------------------- sticky comfort */
+@media (max-width: 1023px) {
+  /* notch/home-indicator safe areas (iPhone X+, Android gesture bar) */
+  #siteHeader { padding-top: env(safe-area-inset-top, 0px); }
+  #cartDrawer .flex-none:last-child,
+  #cartDrawer .p-5 { padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)); }
+  .kp-sticky { padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .kflt-drawer .kflt-dfoot { padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px)); }
+  .kflt-drawer { padding-bottom: env(safe-area-inset-bottom, 0px); }
+  #kfltToast { bottom: calc(18px + env(safe-area-inset-bottom, 0px)); }
+  /* the PDP sticky bar must never sit on top of the last content or the toast */
+  body:has(.kp-sticky) main, body:has(.kp-sticky) #productView { padding-bottom: 84px; }
+}
+
+/* --------------------------------------------------- motion & effect budget */
+@media (max-width: 430px) {
+  /* blur is the most expensive effect on a phone GPU — keep the look, drop the cost */
+  .backdrop-blur-xl { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  .marquee { will-change: transform; }
+  /* hover-only niceties do not belong on touch */
+  .p-card:hover, .media-thumb:hover { transform: none; }
+  /* solid, immediate press feedback instead */
+  .btn:active, .filter-btn:active, .kflt-btn:active, #searchBtn:active, #cartBtn:active, #menuBtn:active, #wishBtn:active {
+    transform: scale(.97);
+  }
+  .p-card:active { transform: scale(.995); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee, .marquee-track, .ticker-product { animation: none !important; }
+}
+
+/* --------------------------------------------------------- paint performance */
+@media (max-width: 1023px) {
+  /* let the browser skip painting far-below-the-fold sections while scrolling */
+  #tech, #lookbook, #stories, #club, footer { content-visibility: auto; contain-intrinsic-size: auto 900px; }
+}
+
+/* --------------------------------------------------------- wishlist (new) */
+#wishBtn { position: relative; }
+#wishBtn .wish-count {
+  position: absolute; top: -6px; right: -6px; min-width: 19px; height: 19px; padding: 0 4px;
+  display: none; place-items: center; background: #d4af37; color: #08080a;
+  font-family: "Courier New", monospace; font-size: 10px; font-weight: 700; letter-spacing: 0;
+}
+#wishBtn.has-items .wish-count { display: grid; }
+#wishBtn[aria-expanded="true"] { background: #d4af37; color: #08080a; border-color: #d4af37; }
+
+#wishPanel {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 92;
+  width: min(420px, 94vw); background: #111113; color: #f5f0ea;
+  border-left: 2px solid #d4af37; display: flex; flex-direction: column;
+  transform: translateX(102%); transition: transform .42s cubic-bezier(.16, 1, .3, 1);
+  box-shadow: -18px 0 44px rgba(0, 0, 0, .5);
+}
+#wishPanel.on { transform: none; }
+#wishScrim {
+  position: fixed; inset: 0; z-index: 91; background: rgba(4, 4, 6, .78);
+  opacity: 0; pointer-events: none; transition: opacity .35s ease;
+}
+#wishScrim.on { opacity: 1; pointer-events: auto; }
+#wishPanel .wp-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 18px 18px 16px; border-bottom: 1px solid rgba(212, 175, 55, .28);
+  padding-top: calc(18px + env(safe-area-inset-top, 0px));
+}
+#wishPanel .wp-k {
+  font-family: "Courier New", monospace; font-size: 9.5px; letter-spacing: .22em;
+  text-transform: uppercase; color: rgba(245, 240, 234, .45);
+}
+#wishPanel h2 { font-family: Impact, "Arial Black", sans-serif; font-size: 26px; letter-spacing: .01em; margin-top: 3px; }
+#wishPanel .wp-close {
+  width: 44px; height: 44px; flex: 0 0 auto; background: #08080a; color: #f2d273;
+  border: 1.5px solid rgba(212, 175, 55, .5); font-size: 18px; line-height: 1; display: grid; place-items: center;
+}
+#wishPanel .wp-body { flex: 1; overflow: auto; overscroll-behavior: contain; padding: 14px 16px 20px; -webkit-overflow-scrolling: touch; }
+#wishPanel .wp-empty {
+  border: 1px dashed rgba(212, 175, 55, .4); padding: 34px 20px; text-align: center;
+  font-family: "Courier New", monospace; font-size: 11.5px; letter-spacing: .14em;
+  text-transform: uppercase; color: rgba(245, 240, 234, .55);
+}
+#wishPanel .wp-item {
+  display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 12px;
+  padding: 12px; background: #0d0d10; border: 1px solid rgba(212, 175, 55, .2);
+}
+#wishPanel .wp-item + .wp-item { margin-top: 10px; }
+#wishPanel .wp-item img { width: 74px; height: 74px; object-fit: cover; background: #08080a; }
+#wishPanel .wp-name { font-weight: 800; font-size: 13.5px; line-height: 1.25; }
+#wishPanel .wp-meta {
+  font-family: "Courier New", monospace; font-size: 10px; letter-spacing: .12em;
+  text-transform: uppercase; color: rgba(245, 240, 234, .5); margin-top: 5px;
+}
+#wishPanel .wp-acts { display: flex; gap: 8px; margin-top: 10px; }
+#wishPanel .wp-add, #wishPanel .wp-remove {
+  min-height: 40px; padding: 0 12px; font-family: "Courier New", monospace; font-size: 10px;
+  font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+  border: 1.5px solid rgba(212, 175, 55, .5); background: transparent; color: #f5f0ea;
+}
+#wishPanel .wp-add { background: #d4af37; color: #08080a; border-color: #d4af37; }
+#wishPanel .wp-remove { width: 40px; padding: 0; flex: 0 0 auto; }
+#wishPanel .wp-foot {
+  padding: 12px 16px calc(14px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid rgba(212, 175, 55, .22);
+  font-family: "Courier New", monospace; font-size: 10px; letter-spacing: .14em;
+  text-transform: uppercase; color: rgba(245, 240, 234, .45);
+}
+body.wish-open { overflow: hidden; }
+
+/* quick actions row inside the mobile menu */
+.mob-actions { display: flex; gap: 10px; padding: 0 22px 18px; }
+.mob-actions button {
+  flex: 1; min-height: 48px; background: #111113; color: #f5f0ea;
+  border: 1.5px solid rgba(212, 175, 55, .45);
+  font-family: "Courier New", monospace; font-size: 10.5px; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase;
+}
+.mob-actions button:active { transform: scale(.97); }
+#mobileMenu .label.text-white\/45 { font-size: 11px; }
+
+
+/* ------------------------------------------------------- header fit (measured)
+   At 390px the wordmark's box was being squeezed by the icon row and its glyphs
+   spilled over the icons. Give the logo its own scale + stop it overflowing,
+   and tighten the icon gap / padding. */
+@media (max-width: 1023px) {
+  #siteHeader .flex.items-center.justify-between { gap: 10px; }
+  #siteHeader a[href="#top"] {
+    font-size: 26px !important; letter-spacing: -.01em; min-width: 0;
+    max-width: 46vw; overflow: hidden; white-space: nowrap; flex: 0 1 auto;
+  }
+  #siteHeader .flex.items-center.gap-2\.5 { gap: 6px; flex: 0 0 auto; }
+  #siteHeader .max-w-\[1440px\] { padding-left: 14px; padding-right: 14px; }
+}
+@media (max-width: 430px) {
+  #siteHeader a[href="#top"] { font-size: 22px !important; }
+  #siteHeader .flex.items-center.justify-between { gap: 8px; }
+}
+/* the very smallest phones: the wishlist lives in the menu (it stays on the cards + PDP) */
+@media (max-width: 360px) {
+  #wishBtn { display: none !important; }
+}
+
+/* --------------------------------------------------- collection toolbar order */
+@media (max-width: 1023px) {
+  .kflt-toolbar { gap: 8px; }
+  .kflt-toolbar > .kflt-search,
+  .kflt-toolbar > .kflt-searchwrap { order: 1; flex: 1 1 100%; }
+  .kflt-toolbar > .kflt-filtersbtn { order: 2; flex: 1 1 46%; }
+  .kflt-toolbar > [data-kflt="copylink"] { order: 3; flex: 1 1 26%; }
+  .kflt-toolbar > #kfltClearAllBtn { order: 4; flex: 1 1 26%; }
+  .kflt-toolbar > #kfltStatusHost { order: 5; }
+  .kflt-toolbar > .kflt-chips { order: 6; }
+  .kflt-toolbar > .kflt-progress { order: 7; }
+}
+
+
+/* the bag button reads "Bag 0" on phones too — a lone count chip reads as unfinished */
+@media (max-width: 1023px) {
+  #cartBtn { padding-left: 9px; padding-right: 9px; gap: 6px; font-size: 10.5px; }
+  #cartBtn .hidden.sm\:inline { display: inline !important; }
+  #mobBagIcon { display: none; }
+}
+/* phones: icon + count (keeps four 44px controls beside the wordmark) */
+@media (max-width: 430px) {
+  #cartBtn .hidden.sm\:inline { display: none !important; }
+  #mobBagIcon { display: grid; place-items: center; }
+  #cartBtn { padding-left: 10px; padding-right: 10px; }
+}
+@media (max-width: 360px) {
+  #cartBtn { padding-left: 10px; padding-right: 10px; gap: 6px; }
+  #siteHeader a[href="#top"] { font-size: 20px !important; }
+}
+
+/* the desktop header keeps its original set of icons */
+@media (min-width: 1024px) { #wishBtn { display: none !important; } }
+
+/* ==========================================================================
+   ROUND 2 — fixes found by measuring the live site at 320 / 360 / 375 / 390 /
+   414 / 430 / 768 / 1024 / 1440. Each one is a measured defect, not a guess.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------------
+   1. PDP horizontal scroll at 320–375px  (measured page+60px @320)
+   `.kp-grid { grid-template-columns: 1fr }` gives the column an `auto`
+   minimum, and the gallery's min-content (364px) then wins — the whole page
+   scrolls sideways. `minmax(0, 1fr)` plus min-width:0 on the media children
+   keeps the column at the container width at every phone size.
+   --------------------------------------------------------------------------- */
+@media (max-width: 1023px) {
+  .kp-grid { grid-template-columns: minmax(0, 1fr) !important; }
+  .kp-grid > *,
+  .kp-gallery, .kp-stage, .kp-thumbs, .kp-rail,
+  .kp-card, .kp-card-img, .kp-info-grid > *, .kp-spec > * { min-width: 0; }
+  .kp-stage img, .kp-stage video { max-width: 100%; }
+}
+
+/* ---------------------------------------------------------------------------
+   2. Cart drawer gave the item list ~110px of a 844px screen (measured),
+   because the checkout block could claim 62vh. On phones the list now keeps
+   at least 150px and grows; the summary shrinks into its own scroll instead.
+   --------------------------------------------------------------------------- */
+@media (max-width: 1023px) {
+  #cartDrawer {
+    height: 100vh;
+    height: 100dvh;              /* no jump when the URL bar hides */
+    max-height: 100dvh;
+  }
+  #cartItems {
+    flex: 1 1 auto;
+    min-height: 140px;
+    padding-bottom: 18px;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  /* The checkout block is the drawer's last child. It sizes to its own content
+     (so the total + "Secure checkout" are on screen without scrolling), and only
+     gives ground once the screen gets short — the item list keeps 140px first. */
+  #cartDrawer > div:last-child {
+    /* the totals + CTA keep their height; the (scrollable) item list yields */
+    flex: 0 0 auto;
+    max-height: min(calc(100vh - 310px), 620px);
+    max-height: min(calc(100dvh - 310px), 620px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: 0 -14px 26px -18px rgba(0, 0, 0, .85);
+  }
+  /* the fields are the bulkiest part of the block — trim the label rhythm */
+  #cartDrawer > div:last-child label { margin-top: 2px; }
+  #cartDrawer #checkoutName, #cartDrawer #checkoutEmail { height: 48px; }
+  #cartDrawer .cart-rows { overscroll-behavior: contain; }
+}
+
+/* ---------------------------------------------------------------------------
+   3. The back-to-top button (z-92) sat on top of the cart sheet (z-87) and on
+   top of the PDP's sticky Buy bar (z-70) — measured at 390px.
+   --------------------------------------------------------------------------- */
+@media (max-width: 1023px) {
+  body:has(#cartDrawer.open) #toTop,
+  body:has(#mobileMenu.open) #toTop,
+  body:has(#searchOverlay.show) #toTop,
+  body:has(#productOverlay.show) #toTop,
+  body:has(#wishPanel.on) #toTop,
+  body:has(.kflt-drawer.on) #toTop,
+  body.ko-locked #toTop,
+  body.kp-sticky-on #toTop {
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+  /* the PDP's sticky bar owns the bottom edge while it is up */
+  body.kp-sticky-on #kfltToast { bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* ---------------------------------------------------------------------------
+   4. Tapping a section link (#collection) put the heading under the fixed
+   header. Anchor targets now clear it.
+   --------------------------------------------------------------------------- */
+@media (max-width: 1023px) {
+  section[id], div[id="collection"], #tech, #lookbook, #stories, #club { scroll-margin-top: 104px; }
+}
+
+/* ---------------------------------------------------------------------------
+   5. PDP breadcrumbs ("Home" / "Collection") were 32x15 tap targets.
+   --------------------------------------------------------------------------- */
+@media (max-width: 1023px) {
+  #productView .kp-crumbs button,
+  #productView .kp-crumbs a {
+    display: inline-flex; align-items: center;
+    min-height: 44px; min-width: 44px; padding: 0 8px; margin: 0 -4px;
+  }
+  #productView .kp-crumbs { row-gap: 0; }
+  /* the crumbs read as one line of small type, so keep the separators tight */
+  #productView .kp-crumbs > * + *::before { margin: 0 2px; }
+}
+
+/* ---------------------------------------------------------------------------
+   6. Legibility floor for the remaining 9.5–10px UI strings on phones.
+   --------------------------------------------------------------------------- */
+@media (max-width: 430px) {
+  .kp-linkbtn, .kp-media-count, .kp-viewtag, .kp-crumbs { font-size: 11px; }
+  .kflt-status, .kflt-statusmsg { font-size: 11px; }
+  .kflt-t, .kflt-n { font-size: 11px; }
+  .kflt-tag, .kflt-recent { font-size: 11px; }
+  #wishPanel .wp-k, #wishPanel .wp-meta { font-size: 11px; }
+  /* checkout dials + labels: the mono eyebrows sat at 10–10.5px, under the floor */
+  #checkoutView .ko-eyebrow, #checkoutView .ko-legend, #checkoutView .ko-lbl,
+  #checkoutView .ko-step, #checkoutView .ko-step .ko-dot, #checkoutView .ko-trust,
+  #checkoutView .ko-stamp, #checkoutView .ko-qty-badge, #checkoutView .ko-back,
+  #checkoutView .ko-hint, #checkoutView .ko-err, #checkoutView .ko-msg,
+  #checkoutView .ko-bar-meta, #checkoutView .ko-sum-head-t { font-size: 11px; }
+}
+
+/* ---------------------------------------------------------------------------
+   7. Filter drawer + suggestion panel: the smallest chips were 40px tall.
+   --------------------------------------------------------------------------- */
+@media (max-width: 1023px) {
+  .kflt-tag, .kflt-recent { min-height: 44px; }
+  .kflt-mini { min-height: 40px; }
+  .kflt-sugbox .kflt-sug { min-height: 62px; }
+  .kflt-sugview { width: 44px; height: 44px; }
+  /* the search field's own clear control */
+  .kflt-search .kflt-clear { width: 44px; height: 44px; right: 2px; }
+}
+
+/* ---------------------------------------------------------------------------
+   8. Room for the taller media strip / stickies at the very bottom of the page
+   --------------------------------------------------------------------------- */
+@media (max-width: 1023px) {
+  footer { padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* short screens (iPhone SE 568 / small Androids): the cart summary becomes a
+   scroll area, so the checkout button rides the bottom edge where the thumb is */
+@media (max-width: 1023px) and (max-height: 700px) {
+  #cartDrawer #checkoutBtn {
+    position: sticky; bottom: 0; z-index: 2;
+    background: #d4af37; border: 2px solid #08080a;
+  }
+  #cartDrawer > div:last-child { padding-bottom: 14px; }
+}
+
+/* the summary block is the busiest part of the bag on a phone — trim its
+   rhythm so totals + "Secure checkout" fit without scrolling on a 390 screen */
+@media (max-width: 430px) {
+  #cartDrawer > div:last-child { padding: 16px 16px calc(16px + env(safe-area-inset-bottom, 0px)); }
+  #cartDrawer #checkoutName, #cartDrawer #checkoutEmail { height: 46px; }
+  #cartDrawer > div:last-child label { font-size: 10.5px; }
+  #cartDrawer #promoInput, #cartDrawer #promoApply { height: 46px; }
+  #cartDrawer #promoInput, #cartDrawer #promoApply, #cartDrawer #checkoutName, #cartDrawer #checkoutEmail { font-size: 16px; }
+  #cartDrawer #promoInput { font-size: 14px; letter-spacing: .12em; }
+}
+
+
+/* ---------------------------------------------------------------- round 3
+   1) Missing utility: kinetic-app.js adds `bg-ink/88 backdrop-blur-xl` to
+      #siteHeader once scrolled past 40px, but that Tailwind variant was never
+      emitted by the build, so the "sticky" header stayed fully transparent on
+      every viewport and content showed through it. kinetic-mobile.css is the
+      last stylesheet, so declaring it here fixes all widths. */
+.bg-ink\/88 { background-color: rgba(8, 8, 10, .88); }
+
+/* ---------------------------------------------------------------- round 3
+   2) 320/360px header: the wishlist button used to be hidden below 361px to
+      make room. Hiding a feature is not an optimisation — instead the bag
+      button becomes icon-only (its count moves onto the button as an overlay,
+      exactly like the wishlist badge) and the logo/gaps tighten a little, so
+      all four actions fit at 320px with a real 44x44 target each. */
+@media (max-width: 360px) {
+  #siteHeader a[href="#top"] { font-size: 18px !important; }
+  #siteHeader .flex.items-center.justify-between { gap: 6px; }
+  #siteHeader .flex.items-center.gap-2\.5 { gap: 4px !important; }
+  /* inline-flex defaults to align-items:stretch, which parked the 17px heart
+     at the very top of its 44px box (half of it behind the ticker bar) */
+  #wishBtn { display: inline-flex !important; align-items: center !important; justify-content: center !important; }
+  /* the bag keeps its brand look (icon + dark count chip, exactly like 390px+)
+     but packed into a real 44px target: 2+17+3+19+2 = 43px of content */
+  #cartBtn { width: auto; min-width: 44px; padding: 0 2px !important; gap: 3px !important; }
+  #cartBtn #cartCount { min-width: 19px; height: 19px; padding: 0 4px; font-size: 10px; line-height: 1; }
+}
+
+/* ---------------------------------------------------------------- round 3
+   3) Checkout on a phone: the step's primary action ("Continue to shipping",
+   "Place order") used to sit ~500px below the fold at 320 — every order began
+   with a scroll hunt. On touch widths the action row now rides the bottom of
+   the scrolling checkout surface with a soft fade behind it, the same pattern
+   the cart drawer uses. Taps pass through the empty space around the buttons. */
+@media (max-width: 1023px) {
+  #checkoutView .ko-actions {
+    position: sticky; bottom: 0; z-index: 6;
+    margin-top: 18px;
+    padding: 14px 0 calc(14px + env(safe-area-inset-bottom, 0px));
+    background: linear-gradient(180deg, rgba(17, 17, 19, 0) 0%, rgba(17, 17, 19, .92) 42%, #111113 100%);
+    pointer-events: none;
+  }
+  #checkoutView .ko-actions > * { pointer-events: auto; }
+}
+
+/* ---------------------------------------------------------------- round 4
+   4) Legibility sweep: the audit still found sub-11px strings on the PDP
+   (badges 9.5, crop marks 7.5, EU size hints 8.5, SKU/eyebrow 10), in the
+   filter chrome (10px) and in the mobile menu actions (10.5). All of them are
+   raised to an 11px floor on phones. This is a type ceiling, not a layout
+   change — and it fixes the "2-year warranty" spill: at 12px with .18em
+   tracking the string was 8px wider than its 86px trust column on a 320
+   screen, so those headings also get room to break. */
+@media (max-width: 430px) {
+  #productView .kp-eyebrow, #productView .kp-sku, #productView .kp-stock-chip,
+  #productView .kp-label, #productView .kp-badge, #productView .kp-save-pill,
+  #productView .kp-size-note, #productView .kp-rev-meta, #productView .kp-rev-bar,
+  #productView .kp-cropmark, #productView .kp-rating-link,
+  #productView .kp-card-cat, #productView .kp-card-rating, #productView .kp-card-tag,
+  #productView .kp-size small { font-size: 11px; }
+  #kpSticky .kp-sticky-meta { font-size: 11px; }
+  #kfltFiltersBtn, #kfltToolbar .kflt-btn, .kflt-btn.ghost { font-size: 11px; }
+  #mobileMenu #mobActions button { font-size: 11px; }
+  [class*="tracking-[.18em]"] { letter-spacing: .1em; overflow-wrap: anywhere; }
+}
