@@ -61,7 +61,8 @@
           "name": "Warm Cream",
           "swatch": "#F5F0EA"
         }
-      ]
+      ],
+      "featured": true
     },
     {
       "id": 1,
@@ -87,7 +88,8 @@
           "name": "Warm Cream",
           "swatch": "#F5F0EA"
         }
-      ]
+      ],
+      "featured": true
     },
     {
       "id": 2,
@@ -166,7 +168,8 @@
           "name": "Midnight Black",
           "swatch": "#08080A"
         }
-      ]
+      ],
+      "featured": true
     },
     {
       "id": 5,
@@ -192,7 +195,8 @@
           "name": "Midnight Black",
           "swatch": "#08080A"
         }
-      ]
+      ],
+      "featured": true
     },
     {
       "id": 6,

@@ -2,9 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<!-- This site is hosted on Netlify. Anyone can build and deploy a site
-     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=43340813-4840-49f8-99df-2325dafbf43f
-     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+<meta name="kinetic-api" content="/api">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>KINETIC® — Zero Friction. All Attitude.</title>
 <meta name="description" content="KINETIC® performance footwear. Explore running, lifestyle, court and limited-edition silhouettes, compare colourways and sizes, and preview the KINETIC store." />
@@ -12,12 +10,12 @@
 <meta name="theme-color" content="#08080A">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2308080A'/%3E%3Cpath d='M16 48V16h8v13l14-13h10L32 31l17 17H38L24 33v15z' fill='%23D4AF37'/%3E%3C/svg%3E">
 <meta property="og:type" content="website">
-<link rel="canonical" href="https://huzaifasyed469432-coder.github.io/kinetic/">
+<link rel="canonical" href="https://kinetic-store-site.vercel.app/">
 <meta property="og:site_name" content="KINETIC®">
 <meta property="og:title" content="KINETIC® — Zero Friction. All Attitude.">
 <meta property="og:description" content="Explore the KINETIC® performance footwear collection, compare colourways and sizes, and preview the store.">
-<meta property="og:url" content="https://huzaifasyed469432-coder.github.io/kinetic/">
-<meta property="og:image" content="https://huzaifasyed469432-coder.github.io/kinetic/assets/images/40a470397f3ef7b7.jpg">
+<meta property="og:url" content="https://kinetic-store-site.vercel.app/">
+<meta property="og:image" content="https://kinetic-store-site.vercel.app/assets/images/40a470397f3ef7b7.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:alt" content="Illustrative red-and-black running shoe product image">
 <meta property="og:image:width" content="1100">
@@ -25,14 +23,28 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="KINETIC® — Zero Friction. All Attitude.">
 <meta name="twitter:description" content="Explore the KINETIC® performance footwear collection, compare colourways and sizes, and preview the store.">
-<meta name="twitter:image" content="https://chimerical-chimera-a53752.netlify.app/assets/images/40a470397f3ef7b7.jpg">
+<meta name="twitter:image" content="https://kinetic-store-site.vercel.app/assets/images/40a470397f3ef7b7.jpg">
 <meta name="twitter:image:alt" content="Illustrative red-and-black running shoe product image">
 <link rel="stylesheet" href="assets/kinetic.css">
+<link rel="stylesheet" href="assets/kinetic-theme.css">
+<link rel="stylesheet" href="assets/kinetic-checkout.css">
+<link rel="stylesheet" href="assets/kinetic-product.css">
+<link rel="stylesheet" href="assets/kinetic-shop-filters.css">
+<link rel="stylesheet" href="assets/kinetic-mobile.css">
+<link rel="stylesheet" href="assets/kinetic-auth.css">
 <script defer src="assets/gsap.min.js"></script>
 <script defer src="assets/ScrollTrigger.min.js"></script>
 <script src="assets/kinetic-gh-config.js"></script>
 <script src="assets/kinetic-defaults.js"></script>
+<script src="assets/kinetic-checkout.js"></script>
+<script src="assets/kinetic-product.js"></script>
 <script src="assets/kinetic-content.js"></script>
+<script src="assets/kinetic-shop-filters.js"></script>
+<script src="assets/kinetic-mobile.js"></script>
+<script src="assets/kinetic-api.js"></script>
+<script src="assets/kinetic-auth.js"></script>
+<script src="assets/kinetic-account.js"></script>
+<script src="assets/kinetic-api-bridge.js?v=1"></script>
 <script>(function(){window.setTimeout(function(){if(window.__kineticPreloaderDone)return;var finish=function(){var pre=document.getElementById('preloader'),bar=document.getElementById('loadBar'),pct=document.getElementById('loadPct');if(bar)bar.style.width='100%';if(pct)pct.textContent='100%';if(pre){pre.classList.add('done');pre.style.display='none';}if(document.body){document.body.classList.remove('loading');document.body.style.overflow='';}window.__kineticPreloaderDone=true;};if(document.body)finish();else document.addEventListener('DOMContentLoaded',finish,{once:true});},3900);})();</script>
 
 <script type="application/ld+json">
@@ -40,9 +52,9 @@
   "@context": "https://schema.org",
   "@type": "OnlineStore",
   "name": "KINETIC",
-  "url": "https://huzaifasyed469432-coder.github.io/kinetic/",
+  "url": "https://kinetic-store-site.vercel.app/",
   "description": "KINETIC performance footwear. Carbon-plated running, lifestyle and court silhouettes.",
-  "logo": "https://huzaifasyed469432-coder.github.io/kinetic/assets/images/40a470397f3ef7b7.jpg",
+  "logo": "https://kinetic-store-site.vercel.app/assets/images/40a470397f3ef7b7.jpg",
   "brand": { "@type": "Brand", "name": "KINETIC" },
   "makesOffer": [
     { "@type": "Offer", "price": "260", "priceCurrency": "USD", "itemOffered": { "@type": "Product", "name": "Voltage Pro Carbon" } },
@@ -147,12 +159,12 @@
       <div class="flex justify-between display text-2xl pt-3 mt-2 border-t-2 border-ink"><span>Total</span><span id="cartTotal">$0.00</span></div>
     </div>
     <div class="grid gap-2.5 mt-4 mb-2">
-      <label for="checkoutName" class="label text-ink/55 text-[10px]">Name for Tap checkout</label>
+      <label for="checkoutName" class="label text-ink/55 text-[10px]">Name for your order</label>
       <input id="checkoutName" name="customerName" type="text" autocomplete="name" required maxlength="120" placeholder="YOUR NAME" class="w-full border-2 border-ink px-3 py-2.5 font-bold text-[12px] tracking-[.08em]" />
-      <label for="checkoutEmail" class="label text-ink/55 text-[10px]">Email for payment receipt</label>
+      <label for="checkoutEmail" class="label text-ink/55 text-[10px]">Email (order contact only)</label>
       <input id="checkoutEmail" name="customerEmail" type="email" autocomplete="email" required maxlength="254" placeholder="YOU@EXAMPLE.COM" class="w-full border-2 border-ink px-3 py-2.5 font-bold text-[12px] tracking-[.08em]" />
     </div>
-    <button id="checkoutBtn" type="button" class="btn btn-solid w-full mt-3">Continue to Tap payment <span class="arw">→</span></button><div id="checkoutStatus" class="hidden mt-3 text-[11px] font-bold leading-relaxed" role="status" aria-live="polite"></div>
+    <button id="checkoutBtn" type="button" class="btn btn-solid w-full mt-3">Secure checkout <span class="arw">→</span></button><div id="checkoutStatus" class="hidden mt-3 text-[11px] font-bold leading-relaxed" role="status" aria-live="polite"></div>
     <button id="continueBtn" class="w-full mt-3 py-2 font-black text-[11px] tracking-[.22em] uppercase text-ink/55 hover:text-ember transition-colors">Continue shopping</button>
   </div>
 </aside>
@@ -172,13 +184,57 @@
           <div id="modalSizes" class="grid grid-cols-4 gap-2" role="group" aria-label="Choose a US shoe size"></div><div id="sizeSelectMessage" class="hidden mt-2 text-[11px] font-bold text-ember" role="status" aria-live="polite"></div>
         </div>
         <div class="mt-auto pt-8 flex gap-3"><button id="modalAdd" type="button" class="btn btn-solid flex-1">Add to bag <span class="arw">→</span></button><button id="modalWishlist" type="button" aria-label="Save to wishlist" aria-pressed="false" title="Save to wishlist" class="w-14 h-[52px] border-2 border-ink flex items-center justify-center hover:bg-ink hover:text-flame transition-colors">♡</button></div>
+        <a id="modalFullDetails" href="#collection" class="mt-5 w-full border-2 border-ink py-3.5 px-4 font-black text-[11px] tracking-[.22em] uppercase text-center hover:bg-ink hover:text-flame transition-colors">View full details <span class="arw" aria-hidden="true">→</span></a>
         <div class="mt-4 label text-ink/40 text-[10px]">Free returns • 2-year warranty • Ships today</div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- CHECKOUT VIEW — opened from the bag, route: #checkout -->
+<div id="checkoutView" role="dialog" aria-modal="true" aria-labelledby="koViewTitle" aria-hidden="true" tabindex="-1">
+  <h1 id="koViewTitle" class="ko-sr">KINETIC® checkout</h1>
+  <p id="koAnnounce" class="ko-sr" role="status" aria-live="polite"></p>
+  <div class="ko-bar">
+    <div class="ko-bar-in">
+      <button type="button" class="ko-logo" data-ko-shop="1" style="background:none;border:0;cursor:pointer;padding:0" aria-label="KINETIC home — leave checkout">KINETIC<span aria-hidden="true">®</span></button>
+      <div class="ko-bar-meta">
+        <span class="ko-secure">Secure checkout</span>
+        <button type="button" class="ko-back" data-ko-shop="1" style="padding:6px 0">Back to shop</button>
+      </div>
+    </div>
+  </div>
+  <div class="ko-wrap">
+    <div id="koSteps"></div>
+    <div class="ko-grid">
+      <div id="koStep" aria-live="off"></div>
+      <aside class="ko-sum" id="koSumCard" aria-label="Order summary">
+        <button type="button" class="ko-sum-head" id="koSumToggle" aria-expanded="false" aria-controls="koSummary">
+          <span>
+            <span class="ko-sum-head-t" id="koSumHeadItems">0 items</span>
+            <span class="ko-sum-head-p" id="koSumHeadPrice">$0.00</span>
+          </span>
+          <span style="display:flex;align-items:center;gap:12px">
+            <span class="ko-sum-head-t">Order summary</span>
+            <span class="ko-caret" aria-hidden="true">▾</span>
+          </span>
+        </button>
+        <div class="ko-sum-body" id="koSummary"></div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<!-- ORDER CONFIRMATION VIEW — route: #order/<number> -->
+<div id="orderView" role="dialog" aria-modal="true" aria-label="Order confirmation" aria-hidden="true" tabindex="-1"></div>
+
+<div id="koToasts" role="region" aria-label="Checkout notifications" aria-live="polite" aria-relevant="additions"></div>
+
 <main id="top" tabindex="-1">
+
+<!-- PRODUCT DETAIL PAGE — one page per sneaker, route: #product/<id> -->
+<div id="productView" role="region" aria-label="Product details"></div>
+
 <section class="relative bg-ink grid-dark overflow-hidden pt-[132px] lg:pt-[152px] pb-16">
   <canvas id="heroCanvas" class="absolute inset-0 w-full h-full opacity-[.55] pointer-events-none" aria-hidden="true"></canvas>
   <div class="hero-glow right-[-16%] top-[4%]"></div>
@@ -210,10 +266,10 @@
             <div class="floaty relative" id="floatyHero">
               <div class="shoe-shadow"></div>
               <div class="img-wrap border border-white/10 shadow-[0_50px_90px_-30px_rgba(255,90,69,.55)] bg-[#0F0F12]">
-                <img id="heroShoe" src="assets/images/40a470397f3ef7b7.jpg" alt="Illustrative red-and-black running shoe product image" class="w-full h-[320px] sm:h-[420px] lg:h-[520px] object-cover object-center select-none" draggable="false" width="1100" height="733" decoding="async" loading="eager" fetchpriority="high" /><div class="absolute inset-0 bg-gradient-to-t from-ink/75 via-transparent to-transparent pointer-events-none"></div>
+                <img id="heroShoe" src="assets/images/40a470397f3ef7b7.jpg" alt="Illustrative red-and-black running shoe product image" class="w-full h-[320px] sm:h-[420px] lg:h-[520px] object-cover object-center select-none" draggable="false" width="1100" height="733" decoding="async" loading="eager" fetchpriority="high" srcset="assets/images/m/40a470397f3ef7b7-480.jpg 480w, assets/images/m/40a470397f3ef7b7-900.jpg 900w, assets/images/40a470397f3ef7b7.jpg 1100w" sizes="100vw" /><div class="absolute inset-0 bg-gradient-to-t from-ink/75 via-transparent to-transparent pointer-events-none"></div>
                 <div class="shoe-reflection"></div>
                 <div class="absolute top-4 right-4 bg-ink/80 backdrop-blur-md border border-flame/50 px-3 py-1.5 label text-flame flex items-center gap-2"><span class="w-1.5 h-1.5 bg-flame rounded-full animate-pulse"></span>Drag to tilt the view</div>
-                <div class="absolute bottom-4 left-4 bg-cream text-ink px-3 py-1.5 label text-[10px] hidden sm:block">Carbon racer profile • Illustrative product image</div>
+                <div class="absolute left-4 bg-cream text-ink px-3 py-1.5 label text-[10px] hidden sm:block" style="top:64px">Carbon racer profile • Illustrative product image</div>
               </div>
               <div class="absolute -bottom-6 left-2 sm:left-4 bg-ink/95 backdrop-blur-md border border-flame/45 px-5 py-4 max-w-[260px]">
                 <div id="heroName" class="display text-[1.35rem] lg:text-[1.9rem] text-cream leading-none">Voltage Pro Carbon</div>
@@ -221,16 +277,16 @@
               </div>
             </div>
           </div>
-          <div class="chip chip-flame chip-float-a hidden sm:block" style="top:8%; left:2%;">Carbon plate · thickness TBC</div>
+          <div class="chip chip-flame chip-float-a hidden sm:block" style="top:8%; left:2%;">Carbon plate</div>
           <div class="chip chip-float-b hidden md:block" style="bottom:20%; right:0%;">Energy return <span data-config-value="energyReturnPercent">92</span>%</div>
           <div class="chip hidden lg:block" style="top:46%; left:-2%;">Weight <span data-config-value="productWeightGrams">184</span>g</div>
         </div>
         <div class="flex items-center justify-center gap-4 mt-10 pb-4 flex-wrap">
           <span class="label text-white/40 hidden sm:block">Featured</span>
           <div class="flex gap-3" id="heroThumbs">
-            <button type="button" aria-pressed="true" class="hero-thumb active w-[64px] h-[64px] border-2 border-white/25 overflow-hidden transition-all duration-300 bg-ink" data-idx="0" aria-label="Voltage Pro Carbon — Inferno red"><img src="assets/images/40a470397f3ef7b7.jpg" alt="" class="w-full h-full object-cover" width="1100" height="733" decoding="async" loading="lazy" /></button>
-            <button type="button" aria-pressed="false" class="hero-thumb w-[64px] h-[64px] border-2 border-white/25 overflow-hidden transition-all duration-300 bg-ink" data-idx="1" aria-label="Apex 01 Racer — Black/Infrared"><img src="assets/images/01c31163ece2a19f.jpg" alt="" class="w-full h-full object-cover" width="1100" height="786" decoding="async" loading="lazy" /></button>
-            <button type="button" aria-pressed="false" class="hero-thumb w-[64px] h-[64px] border-2 border-white/25 overflow-hidden transition-all duration-300 bg-ink" data-idx="2" aria-label="Strike Court Lo — White/Flame"><img src="assets/images/5916e42350811ca9.jpg" alt="" class="w-full h-full object-cover" width="1100" height="880" decoding="async" loading="lazy" /></button>
+            <button type="button" aria-pressed="true" class="hero-thumb active w-[64px] h-[64px] border-2 border-white/25 overflow-hidden transition-all duration-300 bg-ink" data-idx="0" aria-label="Voltage Pro Carbon — Inferno red"><img src="assets/images/40a470397f3ef7b7.jpg" alt="" class="w-full h-full object-cover" width="1100" height="733" decoding="async" loading="lazy" srcset="assets/images/m/40a470397f3ef7b7-480.jpg 480w, assets/images/m/40a470397f3ef7b7-900.jpg 900w, assets/images/40a470397f3ef7b7.jpg 1100w" sizes="(max-width:640px) 92vw, (max-width:1024px) 50vw, 40vw" /></button>
+            <button type="button" aria-pressed="false" class="hero-thumb w-[64px] h-[64px] border-2 border-white/25 overflow-hidden transition-all duration-300 bg-ink" data-idx="1" aria-label="Apex 01 Racer — Black/Infrared"><img src="assets/images/01c31163ece2a19f.jpg" alt="" class="w-full h-full object-cover" width="1100" height="786" decoding="async" loading="lazy" srcset="assets/images/m/01c31163ece2a19f-480.jpg 480w, assets/images/m/01c31163ece2a19f-900.jpg 900w, assets/images/01c31163ece2a19f.jpg 1100w" sizes="(max-width:640px) 92vw, (max-width:1024px) 50vw, 40vw" /></button>
+            <button type="button" aria-pressed="false" class="hero-thumb w-[64px] h-[64px] border-2 border-white/25 overflow-hidden transition-all duration-300 bg-ink" data-idx="2" aria-label="Strike Court Lo — White/Flame"><img src="assets/images/5916e42350811ca9.jpg" alt="" class="w-full h-full object-cover" width="1100" height="880" decoding="async" loading="lazy" srcset="assets/images/m/5916e42350811ca9-480.jpg 480w, assets/images/m/5916e42350811ca9-900.jpg 900w, assets/images/5916e42350811ca9.jpg 1100w" sizes="(max-width:640px) 92vw, (max-width:1024px) 50vw, 40vw" /></button>
           </div>
           <div class="flex items-center gap-2.5 flex-wrap justify-center" role="group" aria-label="Featured shoe colourway">
             <span class="label text-white/40">Colourway</span>
@@ -267,9 +323,10 @@
 <section id="collection" class="bg-white text-ink py-20 lg:py-28 relative">
   <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10">
     <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
-      <div><div class="reveal label text-ember" data-edit="sections.collectionKicker">/// 01 — The collection</div><h2 class="reveal display h-lg mt-4"><span data-edit="sections.collectionTitle1">Built to</span><br/><span class="stroke-ink" data-edit="sections.collectionTitle2">Dominate</span><span class="text-flame">.</span></h2></div>
-      <div class="reveal max-w-[420px]"><p class="text-ink/60 text-[15px] leading-relaxed font-medium" data-edit="sections.collectionSub">{{stylesLive}} silhouettes. Filter by discipline, inspect product details, and preview a pair in seconds.</p><div class="mt-5 flex items-center gap-3 text-[11px] font-black tracking-[.2em] uppercase"><span id="resultCount" class="bg-ink text-flame px-3 py-1.5" aria-live="polite">8 Products</span><span class="text-ink/40">Sorted by relevance</span></div></div>
+      <div><div class="reveal label text-ember" data-edit="sections.collectionKicker">/// 01 — The collection</div><h2 class="reveal display h-lg mt-4"><span data-edit="sections.collectionTitle1">Built to</span><br/><span class="stroke-cream" data-edit="sections.collectionTitle2">Dominate</span><span class="text-flame">.</span></h2></div>
+      <div class="reveal max-w-[420px]"><p class="text-ink/60 text-[15px] leading-relaxed font-medium" data-edit="sections.collectionSub">8 silhouettes. Filter by discipline, inspect product details, and preview a pair in seconds.</p><div class="mt-5 flex items-center gap-3 text-[11px] font-black tracking-[.2em] uppercase"><span id="resultCount" class="bg-ink text-flame px-3 py-1.5" aria-live="polite">8 Products</span><span class="text-ink/40" id="sortLabel">Sorted by relevance</span></div></div>
     </div>
+    <div id="kfltBar" class="reveal kflt-toolbar"></div>
     <div class="reveal mt-10 lg:mt-12 flex flex-col lg:flex-row gap-4 lg:items-center">
       <div class="flex gap-2.5 overflow-x-auto pb-2 lg:pb-0 drag-scroll" id="filterRow">
         <button type="button" class="filter-btn active" data-filter="All" aria-pressed="true">All</button>
@@ -278,9 +335,14 @@
         <button type="button" class="filter-btn" data-filter="Court" aria-pressed="false">Court</button>
         <button type="button" class="filter-btn" data-filter="Limited" aria-pressed="false">Limited</button>
       </div>
-      <div class="lg:ml-auto"><select id="sortSelect" aria-label="Sort products" class="border-[1.5px] border-ink/20 px-5 py-3.5 font-black text-[11px] tracking-[.18em] uppercase bg-white hover:border-ink transition-colors"><option value="feat">Sort: Featured</option><option value="low">Price: Low → High</option><option value="high">Price: High → Low</option><option value="rate">Top rated</option></select></div>
+      <div class="lg:ml-auto"><select id="sortSelect" aria-label="Sort products" class="border-[1.5px] border-ink/20 px-5 py-3.5 font-black text-[11px] tracking-[.18em] uppercase bg-white hover:border-ink transition-colors"><option value="feat">Sort: Featured</option><option value="new">Sort: Newest</option><option value="low">Price: Low → High</option><option value="high">Price: High → Low</option><option value="rate">Sort: Best rated</option><option value="pop">Sort: Most popular</option></select></div>
     </div>
-    <div id="productGrid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-7 mt-9"></div>
+    <div class="kflt-layout" id="kfltLayout">
+      <div class="kflt-railwrap"><div id="kfltRail"></div></div>
+      <div class="kflt-gridcol">
+        <div id="productGrid" class="kflt-grid grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-7 mt-9"></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -297,7 +359,7 @@
   <div class="absolute inset-0 grid-dark opacity-70"></div>
   <div class="absolute left-[-15%] top-[10%] w-[520px] h-[520px] rounded-full pointer-events-none" style="background:radial-gradient(circle,rgba(212,175,55,.18),rgba(212,175,55,0) 68%)"></div>
   <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10 relative z-10">
-    <div class="max-w-3xl"><div class="reveal label text-flame" data-edit="sections.techKicker">/// 02 — Inside the build</div><h2 class="reveal display h-lg mt-4"><span data-edit="sections.techTitle1">Engineered</span><br/><span class="text-flame" data-edit="sections.techTitle2">To Fly</span><span class="stroke-cream">.</span></h2><p class="reveal mt-6 text-white/60 text-[16px] leading-relaxed font-medium max-w-[560px]" data-edit="sections.techSub">{{labIterationYears}} years of lab iteration, {{fieldTestKm}} kilometres of field testing and a single target: return more energy than anything you've ever worn.</p></div>
+    <div class="max-w-3xl"><div class="reveal label text-flame" data-edit="sections.techKicker">/// 02 — Inside the build</div><h2 class="reveal display h-lg mt-4"><span data-edit="sections.techTitle1">Engineered</span><br/><span class="text-flame" data-edit="sections.techTitle2">To Fly</span><span class="stroke-cream">.</span></h2><p class="reveal mt-6 text-white/60 text-[16px] leading-relaxed font-medium max-w-[560px]" data-edit="sections.techSub">3 years of lab iteration, 10,000 kilometres of field testing and a single target: return more energy than anything you've ever worn.</p></div>
     <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 mt-14 items-center">
       <div class="space-y-4">
         <div class="tech-item active reveal-l" data-tech="0">
@@ -313,7 +375,7 @@
       <div class="reveal relative">
         <div class="absolute -inset-3 bg-flame/22 rotate-[-1.6deg]"></div><div class="absolute -inset-3 bg-cream/10 rotate-[1.4deg]"></div>
         <div class="relative img-wrap border border-white/12">
-          <img id="techImg" src="assets/images/5916e42350811ca9.jpg" alt="Illustrative white-and-coral running shoe image" class="w-full h-[380px] sm:h-[520px] lg:h-[600px] object-cover transition-all duration-700" width="1100" height="880" decoding="async" loading="lazy" /><div class="shoe-reflection"></div>
+          <img id="techImg" src="assets/images/5916e42350811ca9.jpg" alt="Illustrative white-and-coral running shoe image" class="w-full h-[380px] sm:h-[520px] lg:h-[600px] object-cover transition-all duration-700" width="1100" height="880" decoding="async" loading="lazy" srcset="assets/images/m/5916e42350811ca9-480.jpg 480w, assets/images/m/5916e42350811ca9-900.jpg 900w, assets/images/5916e42350811ca9.jpg 1100w" sizes="(max-width:640px) 92vw, (max-width:1024px) 50vw, 40vw" /><div class="shoe-reflection"></div>
           <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink via-ink/75 to-transparent p-6 pt-20">
             <div class="flex items-end justify-between gap-4"><div><div id="techLabel" class="display text-[1.75rem] text-flame leading-none">Carbon core</div><div class="label text-white/45 mt-2">Cutaway — 4× magnification</div></div><div class="flex gap-2"><button type="button" aria-pressed="true" class="tech-dot w-9 h-[5px] bg-flame transition-all duration-500" data-tech="0" aria-label="Technology detail 1"></button><button type="button" aria-pressed="false" class="tech-dot w-9 h-[5px] bg-white/25 transition-all duration-500" data-tech="1" aria-label="Technology detail 2"></button><button type="button" aria-pressed="false" class="tech-dot w-9 h-[5px] bg-white/25 transition-all duration-500" data-tech="2" aria-label="Technology detail 3"></button></div></div>
           </div>
@@ -356,7 +418,7 @@
       <div id="revBox" class="relative z-10 transition-all duration-500">
         <div class="text-flame text-xl tracking-[.35em]">★★★★★</div>
         <p id="revText" aria-live="polite" class="display text-[clamp(1.55rem,3.6vw,3rem] leading-[1.08] mt-6 max-w-4xl"></p>
-        <div class="mt-9 flex items-center gap-5"><img id="revAvatar" src="assets/images/fb10e562f94a80bc.jpg" alt="" class="w-16 h-16 rounded-full object-cover border-2 border-flame" width="1100" height="1650" decoding="async" loading="lazy" /><div><div id="revName" class="font-black tracking-[.12em] text-[13px] uppercase"></div><div id="revMeta" class="label text-white/45 mt-1.5"></div></div></div>
+        <div class="mt-9 flex items-center gap-5"><img id="revAvatar" src="assets/images/fb10e562f94a80bc.jpg" alt="" class="w-16 h-16 rounded-full object-cover border-2 border-flame" width="1100" height="1650" decoding="async" loading="lazy" srcset="assets/images/m/fb10e562f94a80bc-480.jpg 480w, assets/images/m/fb10e562f94a80bc-900.jpg 900w, assets/images/fb10e562f94a80bc.jpg 1100w" sizes="(max-width:640px) 92vw, (max-width:1024px) 50vw, 40vw" /><div><div id="revName" class="font-black tracking-[.12em] text-[13px] uppercase"></div><div id="revMeta" class="label text-white/45 mt-1.5"></div></div></div>
       </div>
     </div>
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
@@ -375,7 +437,7 @@
     <div class="reveal label text-ink/70" data-edit="sections.clubKicker">/// Join the club</div>
     <h2 class="reveal display h-xl mt-5"><span data-edit="sections.clubTitle1">Get the</span><br/><span class="bg-ink text-flame px-5 inline-block -rotate-[1.5deg]" data-edit="sections.clubTitle2">heat first</span></h2>
     <p class="reveal mt-8 font-bold text-ink/75 max-w-[520px] mx-auto text-[16px] leading-relaxed" data-edit="sections.clubSub">Early access to drops, members-only colourways and 20% off your order. <span data-config-value="membersTeaser">45,000</span> insiders and counting.</p>
-    <form id="newsForm" name="newsletter" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="reveal mt-10 flex flex-col sm:flex-row gap-4 max-w-[560px] mx-auto"><input type="hidden" name="form-name" value="newsletter"/><p class="hidden" aria-hidden="true"><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"/></label></p>
+    <form id="newsForm" name="newsletter" method="POST" class="reveal mt-10 flex flex-col sm:flex-row gap-4 max-w-[560px] mx-auto"><input type="hidden" name="form-name" value="newsletter"/><p class="hidden" aria-hidden="true"><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"/></label></p>
       <input id="newsInput" name="email" autocomplete="email" inputmode="email" type="email" required placeholder="YOUR@EMAIL.COM" class="flex-1 bg-white text-ink border-2 border-ink px-6 py-4 font-black tracking-[.16em] text-[12px] uppercase shadow-[9px_9px_0_rgba(8,8,10,.85)] placeholder:text-ink/35" />
       <button type="submit" class="btn btn-dark magnetic !bg-ink !text-flame !shadow-[9px_9px_0_rgba(255,255,255,.9)]">Sign me up <span class="arw">→</span></button>
     </form>
@@ -388,13 +450,13 @@
 <footer class="bg-ink text-cream pt-20 pb-8 relative overflow-hidden">
   <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10">
     <div class="grid lg:grid-cols-[1.5fr_1fr_1fr_1.2fr] gap-12 lg:gap-10 pb-14 border-b border-white/10">
-      <div><div class="display text-[2.6rem] leading-none">KINETIC<span class="text-flame">®</span></div><p class="mt-5 text-white/50 text-[14.5px] leading-relaxed font-medium max-w-[330px]" data-edit="footer.blurb">High-contrast footwear for high-volume lives. Designed in the lab, proven on the street, worn loud worldwide.</p><div class="flex gap-3 mt-7"><button type="button" data-destination="instagram" aria-label="Instagram — configure official KINETIC link" class="magnetic w-11 h-11 border border-white/18 flex items-center justify-center font-black text-[11px] tracking-[.12em] hover:bg-flame hover:text-ink hover:border-flame transition-colors footer-action">IG</button><button type="button" data-destination="tiktok" aria-label="TikTok — configure official KINETIC link" class="magnetic w-11 h-11 border border-white/18 flex items-center justify-center font-black text-[11px] tracking-[.12em] hover:bg-flame hover:text-ink hover:border-flame transition-colors footer-action">TT</button><button type="button" data-destination="x" aria-label="X — configure official KINETIC link" class="magnetic w-11 h-11 border border-white/18 flex items-center justify-center font-black text-[11px] tracking-[.12em] hover:bg-flame hover:text-ink hover:border-flame transition-colors footer-action">X</button><button type="button" data-destination="youtube" aria-label="YouTube — configure official KINETIC link" class="magnetic w-11 h-11 border border-white/18 flex items-center justify-center font-black text-[11px] tracking-[.12em] hover:bg-flame hover:text-ink hover:border-flame transition-colors footer-action">YT</button></div></div>
+      <div><div class="display text-[2.6rem] leading-none">KINETIC<span class="text-flame">®</span></div><p class="mt-5 text-white/50 text-[14.5px] leading-relaxed font-medium max-w-[330px]" data-edit="footer.blurb">High-contrast footwear for high-volume lives. Designed in the lab, proven on the street, worn loud worldwide.</p></div>
       <div><div class="label text-flame mb-6">Shop</div><ul class="space-y-3.5 text-[13.5px] font-semibold text-white/55"><li><a href="#collection" class="hover:text-flame transition-colors">All footwear</a></li><li><a href="#collection" class="hover:text-flame transition-colors">Running</a></li><li><a href="#collection" class="hover:text-flame transition-colors">Lifestyle</a></li><li><a href="#collection" class="hover:text-flame transition-colors">Court</a></li><li><a href="#collection" class="hover:text-flame transition-colors">Limited drops</a></li></ul></div>
-      <div><div class="label text-flame mb-6">Support</div><ul class="space-y-3.5 text-[13.5px] font-semibold text-white/55"><li><button type="button" data-destination="trackOrder" aria-label="Track order" class="hover:text-flame transition-colors footer-action">Track order</button></li><li><button type="button" data-destination="sizeGuide" aria-label="Size guide" class="hover:text-flame transition-colors footer-action">Size guide</button></li><li><button type="button" data-destination="returns" aria-label="Returns" class="hover:text-flame transition-colors footer-action">Returns</button></li><li><button type="button" data-destination="contact" aria-label="Contact" class="hover:text-flame transition-colors footer-action">Contact</button></li><li><button type="button" data-destination="storeLocator" aria-label="Store locator" class="hover:text-flame transition-colors footer-action">Store locator</button></li></ul></div>
-      <div><div class="label text-flame mb-6">Flagship</div><div class="img-wrap border border-white/12"><img src="assets/images/793473e10624e6a6.jpg" alt="Illustrative black footwear retail interior with red neon lighting" class="w-full h-[180px] object-cover" width="1100" height="734" decoding="async" loading="lazy" /></div><div class="mt-5 text-[13px] text-white/55 font-medium leading-relaxed">128 Mercer Street<br/>New York, NY 10012<br/><span class="text-flame font-bold">Mon–Sat · 10:00 — 20:00</span></div></div>
+      <div><div class="label text-flame mb-6">Support</div><ul class="space-y-3.5 text-[13.5px] font-semibold text-white/55"><li><button type="button" data-destination="sizeGuide" aria-label="Size guide" class="hover:text-flame transition-colors footer-action">Size guide</button></li></ul></div>
+      <div><div class="label text-flame mb-6">Flagship</div><div class="img-wrap border border-white/12"><img src="assets/images/793473e10624e6a6.jpg" alt="Illustrative black footwear retail interior with red neon lighting" class="w-full h-[180px] object-cover" width="1100" height="734" decoding="async" loading="lazy" srcset="assets/images/m/793473e10624e6a6-480.jpg 480w, assets/images/m/793473e10624e6a6-900.jpg 900w, assets/images/793473e10624e6a6.jpg 1100w" sizes="(max-width:640px) 92vw, (max-width:1024px) 50vw, 40vw" /></div><div class="mt-5 text-[13px] text-white/55 font-medium leading-relaxed">128 Mercer Street<br/>New York, NY 10012<br/><span class="text-flame font-bold">Mon–Sat · 10:00 — 20:00</span></div></div>
     </div>
     <div class="wordmark display text-[clamp(3.4rem,16vw,14.5rem)] leading-[.82] text-center mt-12 select-none whitespace-nowrap">KINETIC<span class="text-flame">®</span></div>
-    <div class="flex flex-col md:flex-row justify-between items-center gap-4 pt-8 border-t border-white/10 label text-white/35"><span data-edit="footer.copy">© 2026 Kinetic Footwear. All rights reserved.</span><span class="hidden md:block" data-edit="footer.tagline">Designed loud · Built to last</span><span class="flex gap-6"><button type="button" data-destination="privacy" aria-label="Privacy" class="hover:text-flame transition-colors footer-action">Privacy</button><button type="button" data-destination="terms" aria-label="Terms" class="hover:text-flame transition-colors footer-action">Terms</button><button type="button" data-destination="cookies" aria-label="Cookies" class="hover:text-flame transition-colors footer-action">Cookies</button></span></div>
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4 pt-8 border-t border-white/10 label text-white/35"><span data-edit="footer.copy">© 2026 Kinetic Footwear. All rights reserved.</span><span class="hidden md:block" data-edit="footer.tagline">Designed loud · Built to last</span></div>
   </div>
 </footer>
 </main>
@@ -403,4 +465,4 @@
 <button id="toTop" class="magnetic fixed bottom-6 right-4 sm:right-6 z-[92] w-14 h-14 bg-flame text-ink border-2 border-ink font-black text-xl opacity-0 pointer-events-none transition-all duration-500 hover:bg-cream" aria-label="Back to top">↑</button>
 
 </body>
-</html><script async src="/.netlify/scripts/hud?variant=public" data-nf-variant="public" data-netlify-site-id="43340813-4840-49f8-99df-2325dafbf43f" data-app-host="app.netlify.com"></script>
+</html>
