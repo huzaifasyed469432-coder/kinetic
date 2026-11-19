@@ -56,9 +56,9 @@
   function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
   /* mobile image variants (480w/900w in assets/images/m/) — browser falls back if absent */
 function kpSrcset(url, sizes){
-  var m=/^assets\/images\/([A-Za-z0-9._-]+)\.jpg$/i.exec(String(url||''));
+  var m=/^assets\/images\/([A-Za-z0-9._-]+)\.svg$/i.exec(String(url||''));
   if(!m) return '';
-  return ' srcset="assets/images/m/'+m[1]+'-480.jpg 480w, assets/images/m/'+m[1]+'-900.jpg 900w, '+url+' 1100w" sizes="'+sizes+'"';
+  return ' srcset="assets/images/m/'+m[1]+'-480.svg 480w, assets/images/m/'+m[1]+'-900.svg 900w, '+url+' 1100w" sizes="'+sizes+'"';
 }
 function esc(value) {
     return String(value === null || value === undefined ? '' : value).replace(/[&<>"']/g, function (ch) {

@@ -227,13 +227,13 @@
   function upgradeImage(img) {
     if (!img || !img.getAttribute || img.dataset.mSrc) return;
     var src = img.getAttribute('src') || '';
-    var m = /^assets\/images\/([A-Za-z0-9._-]+)\.jpg$/i.exec(src);
+    var m = /^assets\/images\/([A-Za-z0-9._-]+)\.svg$/i.exec(src);
     if (!m) return;
     var name = m[1];
     img.dataset.mSrc = '1';
     var base = 'assets/images/m/' + name;
     /* if a variant were ever missing the browser simply falls back along srcset */
-    img.setAttribute('srcset', base + '-480.jpg 480w, ' + base + '-900.jpg 900w, assets/images/' + name + '.jpg 1100w');
+    img.setAttribute('srcset', base + '-480.svg 480w, ' + base + '-900.svg 900w, assets/images/' + name + '.svg 1100w');
     if (!img.getAttribute('sizes')) img.setAttribute('sizes', sizesFor(img));
     if (!img.getAttribute('decoding')) img.setAttribute('decoding', 'async');
     /* an image that already finished loading keeps its old candidate until we re-select */

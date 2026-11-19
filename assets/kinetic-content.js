@@ -62,7 +62,7 @@
         return {
           id: id, name: 'New Product', cat: 'Running', tag: 'New',
           price: 150, old: null, rating: 4.5, reviews: 0,
-          img: 'assets/images/40a470397f3ef7b7.jpg', desc: '',
+          img: 'assets/images/40a470397f3ef7b7.svg', desc: '',
           colorways: [{ name: 'Midnight Black', swatch: '#08080A' }], colors: ['#08080A']
         };
       }

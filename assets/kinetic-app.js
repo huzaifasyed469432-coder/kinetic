@@ -104,21 +104,21 @@ function applyMarketingConfig(){
 }
 applyMarketingConfig();
 
-var KINETIC_IMAGE_DIMENSIONS={"assets/images/40a470397f3ef7b7.jpg":[1100,733],"assets/images/01c31163ece2a19f.jpg":[1100,786],"assets/images/5916e42350811ca9.jpg":[1100,880],"assets/images/fb10e562f94a80bc.jpg":[1100,1650],"assets/images/793473e10624e6a6.jpg":[1100,734],"assets/images/2c53504d2430d75e.jpg":[1100,1650],"assets/images/81ef1d14c54de2f1.jpg":[1100,734],"assets/images/eb01e5bab3a80e98.jpg":[1100,1375],"assets/images/407e125ad12a7343.jpg":[1100,825],"assets/images/7e7afef3a68aab55.jpg":[1100,1375],"assets/images/e325ae933be2eb0a.jpg":[1100,733],"assets/images/31cc6f2be8488145.jpg":[1100,1650],"assets/images/7ec35cfc4888c347.jpg":[1100,733],"assets/images/11073cb2ab9c627b.jpg":[1100,1467],"assets/images/3c382aa6d2a3c175.jpg":[1100,726],"assets/images/68fa9dff96eb4be2.jpg":[1100,1650],"assets/images/3376a541498e8878.jpg":[1100,1650],"assets/images/ef928fbb81a95a94.jpg":[1100,1650],"assets/images/0aa80a56f46b796a.jpg":[1100,1375]};
+var KINETIC_IMAGE_DIMENSIONS={"assets/images/40a470397f3ef7b7.svg":[1100,734],"assets/images/01c31163ece2a19f.svg":[1100,734],"assets/images/5916e42350811ca9.svg":[1100,880],"assets/images/fb10e562f94a80bc.svg":[1100,1650],"assets/images/793473e10624e6a6.svg":[1100,734],"assets/images/2c53504d2430d75e.svg":[1100,1650],"assets/images/81ef1d14c54de2f1.svg":[1100,734],"assets/images/eb01e5bab3a80e98.svg":[1100,734],"assets/images/407e125ad12a7343.svg":[1100,825],"assets/images/7e7afef3a68aab55.svg":[1100,1375],"assets/images/e325ae933be2eb0a.svg":[1100,733],"assets/images/31cc6f2be8488145.svg":[1100,1650],"assets/images/7ec35cfc4888c347.svg":[1100,733],"assets/images/11073cb2ab9c627b.svg":[1100,1467],"assets/images/3c382aa6d2a3c175.svg":[1100,726],"assets/images/68fa9dff96eb4be2.svg":[1100,1650],"assets/images/3376a541498e8878.svg":[1100,1650],"assets/images/ef928fbb81a95a94.svg":[1100,1650],"assets/images/0aa80a56f46b796a.svg":[1100,1375]};
 function kineticImageDimensions(src){var key=String(src||'').replace(/^\//,'').split(/[?#]/)[0];return KINETIC_IMAGE_DIMENSIONS[key]||[1100,733];}
 function kineticImageDimensionAttrs(src){var d=kineticImageDimensions(src);return ' width="'+d[0]+'" height="'+d[1]+'"';}
 function setKineticImageDimensions(img,src){if(!img)return;var d=kineticImageDimensions(src);img.setAttribute('width',d[0]);img.setAttribute('height',d[1]);}
 function applyKineticImageDimensions(root){if(!root||!root.querySelectorAll)return;root.querySelectorAll('img').forEach(function(img){setKineticImageDimensions(img,img.getAttribute('src')||img.src);});}
 
 var PRODUCTS = [
-  { id:0, name:'Voltage Pro Carbon', cat:'Running', price:260, old:310, tag:'Limited', rating:4.9, reviews:KINETIC_CONFIG.marketing.productReviewCounts.voltageProCarbon, img:'assets/images/40a470397f3ef7b7.jpg', colors:['#D71920','#08080A','#F5F0EA'], colorways:[{name:'Inferno Red',swatch:'#D71920'}, {name:'Midnight Black',swatch:'#08080A'}, {name:'Warm Cream',swatch:'#F5F0EA'}], desc:'Our flagship carbon racer. Real featherweight knit shell over a full-length carbon plate and dual-density VOLTFOAM™ midsole. A bold race-day profile, designed to look as fast as it feels.' },
-  { id:1, name:'Apex 01 Racer', cat:'Running', price:285, old:null, tag:'New', rating:4.8, reviews:KINETIC_CONFIG.marketing.productReviewCounts.apex01Racer, img:'assets/images/01c31163ece2a19f.jpg', colors:['#B8860B','#08080A','#F5F0EA'], colorways:[{name:'Bronze Gold',swatch:'#B8860B'}, {name:'Midnight Black',swatch:'#08080A'}, {name:'Warm Cream',swatch:'#F5F0EA'}], desc:'Race-day geometry with a rocker that keeps you rolling forward. Minimal mass, maximum aggression. Built for race-day intent.' },
-  { id:2, name:'Monolith High', cat:'Lifestyle', price:195, old:230, tag:'Icon', rating:4.9, reviews:KINETIC_CONFIG.marketing.productReviewCounts.monolithHigh, img:'assets/images/2c53504d2430d75e.jpg', colors:['#F5F0EA','#08080A','#D4AF37'], colorways:[{name:'Warm Cream',swatch:'#F5F0EA'}, {name:'Midnight Black',swatch:'#08080A'}, {name:'Flame Gold',swatch:'#D4AF37'}], desc:'A sculpted high-top built from full-grain leather with a cushioned collar. Quiet luxury, loud silhouette.' },
-  { id:3, name:'Strike Court Lo', cat:'Court', price:175, old:null, tag:'Core', rating:4.7, reviews:KINETIC_CONFIG.marketing.productReviewCounts.strikeCourtLo, img:'assets/images/5916e42350811ca9.jpg', colors:['#FFFFFF','#08080A','#D4AF37'], colorways:[{name:'Chalk White',swatch:'#FFFFFF'}, {name:'Midnight Black',swatch:'#08080A'}, {name:'Flame Gold',swatch:'#D4AF37'}], desc:'Herringbone traction, locked-in ankle collar and an explosive first step. Built for blacktop and hardwood.' },
-  { id:4, name:'Inferno Tilt Carbon', cat:'Limited', price:320, old:null, tag:'Limited', editionSize:300, rating:5.0, reviews:KINETIC_CONFIG.marketing.productReviewCounts.infernoTiltCarbon, img:'assets/images/81ef1d14c54de2f1.jpg', colors:['#D4AF37','#F2D273','#08080A'], colorways:[{name:'Flame Gold',swatch:'#D4AF37'}, {name:'Pale Gold',swatch:'#F2D273'}, {name:'Midnight Black',swatch:'#08080A'}], desc:'300 numbered pairs. Reflective cage, glow outsole and a carbon plate tuned for explosive toe-off. Reflective details with a high-visibility finish.' },
-  { id:5, name:'Nebula Runner', cat:'Running', price:210, old:245, tag:'Hot', rating:4.8, reviews:KINETIC_CONFIG.marketing.productReviewCounts.nebulaRunner, img:'assets/images/eb01e5bab3a80e98.jpg', colors:['#E7E0D8','#D4AF37','#08080A'], colorways:[{name:'Soft Stone',swatch:'#E7E0D8'}, {name:'Flame Gold',swatch:'#D4AF37'}, {name:'Midnight Black',swatch:'#08080A'}], desc:'Maximum cushion, maximum statement. Triple-stacked foam and a glacier-soft upper that floats above the pavement.' },
-  { id:6, name:'Shadow Knit', cat:'Lifestyle', price:160, old:null, tag:'New', rating:4.6, reviews:KINETIC_CONFIG.marketing.productReviewCounts.shadowKnit, img:'assets/images/407e125ad12a7343.jpg', colors:['#08080A','#3A3A40','#D4AF37'], colorways:[{name:'Midnight Black',swatch:'#08080A'}, {name:'Graphite',swatch:'#3A3A40'}, {name:'Flame Gold',swatch:'#D4AF37'}], desc:'A stealth everyday silhouette in matte knit with a sock-like fit. Disappears into any fit — until it hits the light.' },
-  { id:7, name:'Retro 85 Carbon', cat:'Court', price:220, old:265, tag:'Archive', rating:4.9, reviews:KINETIC_CONFIG.marketing.productReviewCounts.retro85Carbon, img:'assets/images/7e7afef3a68aab55.jpg', colors:['#D4AF37','#08080A','#F5F0EA'], colorways:[{name:'Flame Gold',swatch:'#D4AF37'}, {name:'Midnight Black',swatch:'#08080A'}, {name:'Warm Cream',swatch:'#F5F0EA'}], desc:'The 1985 legend, remastered with modern cushioning. Vintage shape, full-grain upper, zero nostalgia fatigue.' }
+  { id:0, name:'Voltage Pro Carbon', cat:'Running', price:260, old:310, tag:'Limited', rating:4.9, reviews:KINETIC_CONFIG.marketing.productReviewCounts.voltageProCarbon, img:'assets/images/40a470397f3ef7b7.svg', colors:['#D71920','#08080A','#F5F0EA'], colorways:[{name:'Inferno Red',swatch:'#D71920'}, {name:'Midnight Black',swatch:'#08080A'}, {name:'Warm Cream',swatch:'#F5F0EA'}], desc:'Our flagship carbon racer. Real featherweight knit shell over a full-length carbon plate and dual-density VOLTFOAM™ midsole. A bold race-day profile, designed to look as fast as it feels.' },
+  { id:1, name:'Apex 01 Racer', cat:'Running', price:285, old:null, tag:'New', rating:4.8, reviews:KINETIC_CONFIG.marketing.productReviewCounts.apex01Racer, img:'assets/images/01c31163ece2a19f.svg', colors:['#B8860B','#08080A','#F5F0EA'], colorways:[{name:'Bronze Gold',swatch:'#B8860B'}, {name:'Midnight Black',swatch:'#08080A'}, {name:'Warm Cream',swatch:'#F5F0EA'}], desc:'Race-day geometry with a rocker that keeps you rolling forward. Minimal mass, maximum aggression. Built for race-day intent.' },
+  { id:2, name:'Monolith High', cat:'Lifestyle', price:195, old:230, tag:'Icon', rating:4.9, reviews:KINETIC_CONFIG.marketing.productReviewCounts.monolithHigh, img:'assets/images/2c53504d2430d75e.svg', colors:['#F5F0EA','#08080A','#D4AF37'], colorways:[{name:'Warm Cream',swatch:'#F5F0EA'}, {name:'Midnight Black',swatch:'#08080A'}, {name:'Flame Gold',swatch:'#D4AF37'}], desc:'A sculpted high-top built from full-grain leather with a cushioned collar. Quiet luxury, loud silhouette.' },
+  { id:3, name:'Strike Court Lo', cat:'Court', price:175, old:null, tag:'Core', rating:4.7, reviews:KINETIC_CONFIG.marketing.productReviewCounts.strikeCourtLo, img:'assets/images/5916e42350811ca9.svg', colors:['#FFFFFF','#08080A','#D4AF37'], colorways:[{name:'Chalk White',swatch:'#FFFFFF'}, {name:'Midnight Black',swatch:'#08080A'}, {name:'Flame Gold',swatch:'#D4AF37'}], desc:'Herringbone traction, locked-in ankle collar and an explosive first step. Built for blacktop and hardwood.' },
+  { id:4, name:'Inferno Tilt Carbon', cat:'Limited', price:320, old:null, tag:'Limited', editionSize:300, rating:5.0, reviews:KINETIC_CONFIG.marketing.productReviewCounts.infernoTiltCarbon, img:'assets/images/81ef1d14c54de2f1.svg', colors:['#D4AF37','#F2D273','#08080A'], colorways:[{name:'Flame Gold',swatch:'#D4AF37'}, {name:'Pale Gold',swatch:'#F2D273'}, {name:'Midnight Black',swatch:'#08080A'}], desc:'300 numbered pairs. Reflective cage, glow outsole and a carbon plate tuned for explosive toe-off. Reflective details with a high-visibility finish.' },
+  { id:5, name:'Nebula Runner', cat:'Running', price:210, old:245, tag:'Hot', rating:4.8, reviews:KINETIC_CONFIG.marketing.productReviewCounts.nebulaRunner, img:'assets/images/eb01e5bab3a80e98.svg', colors:['#E7E0D8','#D4AF37','#08080A'], colorways:[{name:'Soft Stone',swatch:'#E7E0D8'}, {name:'Flame Gold',swatch:'#D4AF37'}, {name:'Midnight Black',swatch:'#08080A'}], desc:'Maximum cushion, maximum statement. Triple-stacked foam and a glacier-soft upper that floats above the pavement.' },
+  { id:6, name:'Shadow Knit', cat:'Lifestyle', price:160, old:null, tag:'New', rating:4.6, reviews:KINETIC_CONFIG.marketing.productReviewCounts.shadowKnit, img:'assets/images/407e125ad12a7343.svg', colors:['#08080A','#3A3A40','#D4AF37'], colorways:[{name:'Midnight Black',swatch:'#08080A'}, {name:'Graphite',swatch:'#3A3A40'}, {name:'Flame Gold',swatch:'#D4AF37'}], desc:'A stealth everyday silhouette in matte knit with a sock-like fit. Disappears into any fit — until it hits the light.' },
+  { id:7, name:'Retro 85 Carbon', cat:'Court', price:220, old:265, tag:'Archive', rating:4.9, reviews:KINETIC_CONFIG.marketing.productReviewCounts.retro85Carbon, img:'assets/images/7e7afef3a68aab55.svg', colors:['#D4AF37','#08080A','#F5F0EA'], colorways:[{name:'Flame Gold',swatch:'#D4AF37'}, {name:'Midnight Black',swatch:'#08080A'}, {name:'Warm Cream',swatch:'#F5F0EA'}], desc:'The 1985 legend, remastered with modern cushioning. Vintage shape, full-grain upper, zero nostalgia fatigue.' }
 ];
 /* KINETIC live-content: apply saved product edits + new products over the PRODUCTS array */
 function __kineticMergeProduct(p,s){
@@ -170,7 +170,7 @@ function __kineticApplyContent(){
         var exists=PRODUCTS.some(function(p){ return String(p.id)===String(id); });
         if(exists) return;
         var base={ id:id, name:'New Product', cat:'Running', tag:'New', price:150, old:null, rating:4.5, reviews:0,
-          img:'assets/images/40a470397f3ef7b7.jpg', desc:'',
+          img:'assets/images/40a470397f3ef7b7.svg', desc:'',
           colorways:[{name:'Midnight Black',swatch:'#08080A'}], colors:['#08080A'] };
         var np=__kineticMergeProduct(base,s);
         if(isValidProduct(np)) PRODUCTS.push(np);
@@ -214,7 +214,7 @@ function __kineticApplyDbProducts(){
   list.forEach(function(db){
     if(!db || !isFinite(Number(db.id)) || seen[String(db.id)]) return;
     var base={ id:Number(db.id), name:'New Product', cat:'Running', tag:'New', price:150, old:null, rating:4.5, reviews:0,
-      img:'assets/images/40a470397f3ef7b7.jpg', desc:'',
+      img:'assets/images/40a470397f3ef7b7.svg', desc:'',
       colorways:[{name:'Midnight Black',swatch:'#08080A'}], colors:['#08080A'] };
     var np=__kineticMergeProduct(base, db);
     if(isValidProduct(np)) next.push(np);
@@ -304,17 +304,17 @@ var explicitlySelectedColorsByProduct=Object.create(null);
 PRODUCTS.forEach(function(product){ var first=getProductColorways(product)[0]; if(first) selectedColorsByProduct[String(product.id)]=first.hex; });
 
 var HERO_VARIANTS = [
-  { img:'assets/images/40a470397f3ef7b7.jpg', product:0 },
-  { img:'assets/images/01c31163ece2a19f.jpg', product:1 },
-  { img:'assets/images/5916e42350811ca9.jpg', product:3 }
+  { img:'assets/images/40a470397f3ef7b7.svg', product:0 },
+  { img:'assets/images/01c31163ece2a19f.svg', product:1 },
+  { img:'assets/images/5916e42350811ca9.svg', product:3 }
 ];
 var LOOKS = [
-  { img:'assets/images/e325ae933be2eb0a.jpg', title:'Street / 01', sub:'Downtown sprint', product:0 },
-  { img:'assets/images/31cc6f2be8488145.jpg', title:'Studio / 02', sub:'Inferno session', product:4 },
-  { img:'assets/images/7ec35cfc4888c347.jpg', title:'Track / 03', sub:'The 5am club', product:1 },
-  { img:'assets/images/11073cb2ab9c627b.jpg', title:'Night / 04', sub:'City ops', product:6 },
-  { img:'assets/images/3c382aa6d2a3c175.jpg', title:'Court / 05', sub:'Blacktop kings', product:3 },
-  { img:'assets/images/68fa9dff96eb4be2.jpg', title:'Archive / 06', sub:'Heritage line', product:7 }
+  { img:'assets/images/e325ae933be2eb0a.svg', title:'Street / 01', sub:'Downtown sprint', product:0 },
+  { img:'assets/images/31cc6f2be8488145.svg', title:'Studio / 02', sub:'Inferno session', product:4 },
+  { img:'assets/images/7ec35cfc4888c347.svg', title:'Track / 03', sub:'The 5am club', product:1 },
+  { img:'assets/images/11073cb2ab9c627b.svg', title:'Night / 04', sub:'City ops', product:6 },
+  { img:'assets/images/3c382aa6d2a3c175.svg', title:'Court / 05', sub:'Blacktop kings', product:3 },
+  { img:'assets/images/68fa9dff96eb4be2.svg', title:'Archive / 06', sub:'Heritage line', product:7 }
 ];
 /* KINETIC live-content: apply saved lookbook caption edits */
 try{
@@ -329,9 +329,9 @@ try{
   }
 }catch(__klErr){}
 var TECH_IMGS = [
-  { img:'assets/images/eb01e5bab3a80e98.jpg', label:'Carbon core' },
-  { img:'assets/images/5916e42350811ca9.jpg', label:'Knit weave' },
-  { img:'assets/images/81ef1d14c54de2f1.jpg', label:'VOLTFOAM™' }
+  { img:'assets/images/eb01e5bab3a80e98.svg', label:'Carbon core' },
+  { img:'assets/images/5916e42350811ca9.svg', label:'Knit weave' },
+  { img:'assets/images/81ef1d14c54de2f1.svg', label:'VOLTFOAM™' }
 ];
 /* KINETIC live-content: apply saved tech image label edits */
 try{
@@ -345,10 +345,10 @@ try{
   }
 }catch(__ktErr){}
 var REVIEWS = [
-  { text:'These aren’t shoes, they’re instruments. I took 40 seconds off my 5k in the first week.', name:'Marcus Carter — Marathoner', meta:'Sample review · Voltage Pro Carbon', avatar:'assets/images/fb10e562f94a80bc.jpg' },
-  { text:'The fit is unreal. Zero break-in, zero hot spots, and they look sharper than anything else in my rotation.', name:'Zoe Luna — Creative Director', meta:'Sample review · Inferno Tilt Carbon', avatar:'assets/images/3376a541498e8878.jpg' },
-  { text:'Strike Court lives up to the name. The grip is vicious and my first step has never been quicker.', name:'Devon Wright — Guard', meta:'Sample review · Strike Court Lo', avatar:'assets/images/ef928fbb81a95a94.jpg' },
-  { text:'Retro 85 Carbon is old soul and new tech in one shoe. I bought a second pair the same night.', name:'Sofia Reyes — Collector', meta:'Sample review · Retro 85 Carbon', avatar:'assets/images/0aa80a56f46b796a.jpg' }
+  { text:'These aren’t shoes, they’re instruments. I took 40 seconds off my 5k in the first week.', name:'Marcus Carter — Marathoner', meta:'Sample review · Voltage Pro Carbon', avatar:'assets/images/fb10e562f94a80bc.svg' },
+  { text:'The fit is unreal. Zero break-in, zero hot spots, and they look sharper than anything else in my rotation.', name:'Zoe Luna — Creative Director', meta:'Sample review · Inferno Tilt Carbon', avatar:'assets/images/3376a541498e8878.svg' },
+  { text:'Strike Court lives up to the name. The grip is vicious and my first step has never been quicker.', name:'Devon Wright — Guard', meta:'Sample review · Strike Court Lo', avatar:'assets/images/ef928fbb81a95a94.svg' },
+  { text:'Retro 85 Carbon is old soul and new tech in one shoe. I bought a second pair the same night.', name:'Sofia Reyes — Collector', meta:'Sample review · Retro 85 Carbon', avatar:'assets/images/0aa80a56f46b796a.svg' }
 ];
 /* KINETIC live-content: apply saved testimonial edits */
 try{
@@ -689,16 +689,16 @@ var activeFilter='All', sortMode='feat';
 /* mobile image variants: 480w / 900w live in assets/images/m/ (falls back automatically)
    `sizes` is per context — the same photo is 24vw in the grid and 76vw in the lookbook. */
 function kResponsiveAttrs(src,sizes){
-  var m=/^assets\/images\/([A-Za-z0-9._-]+)\.jpg$/i.exec(String(src||''));
+  var m=/^assets\/images\/([A-Za-z0-9._-]+)\.svg$/i.exec(String(src||''));
   if(!m) return '';
-  return 'srcset="assets/images/m/'+m[1]+'-480.jpg 480w, assets/images/m/'+m[1]+'-900.jpg 900w, '+escapeHtml(src)+' 1100w" sizes="'+(sizes||'(max-width:640px) 92vw, (max-width:1024px) 46vw, 24vw')+'"';
+  return 'srcset="assets/images/m/'+m[1]+'-480.svg 480w, assets/images/m/'+m[1]+'-900.svg 900w, '+escapeHtml(src)+' 1100w" sizes="'+(sizes||'(max-width:640px) 92vw, (max-width:1024px) 46vw, 24vw')+'"';
 }
 function kCardSrcset(src){ return kResponsiveAttrs(src); }
 /* set both attributes on an existing element (used when a panel swaps its photo) */
 function kApplyResponsive(img,src,sizes){
-  var m=/^assets\/images\/([A-Za-z0-9._-]+)\.jpg$/i.exec(String(src||''));
+  var m=/^assets\/images\/([A-Za-z0-9._-]+)\.svg$/i.exec(String(src||''));
   if(!img||!m) return;
-  img.setAttribute('srcset','assets/images/m/'+m[1]+'-480.jpg 480w, assets/images/m/'+m[1]+'-900.jpg 900w, '+src+' 1100w');
+  img.setAttribute('srcset','assets/images/m/'+m[1]+'-480.svg 480w, assets/images/m/'+m[1]+'-900.svg 900w, '+src+' 1100w');
   img.setAttribute('sizes',sizes||'(max-width:640px) 92vw, (max-width:1024px) 46vw, 24vw');
 }
 function tagStyle(tag){ var t=String(tag).toLowerCase(); if(t==='limited') return 'bg-flame text-ink'; if(t==='new') return 'bg-ink text-flame'; if(t==='hot') return 'bg-ember text-white'; return 'bg-white text-ink border border-ink'; }
@@ -829,7 +829,7 @@ if(heroColorways) heroColorways.addEventListener('click',function(event){
   var button=event.target.closest&&event.target.closest('.color-choice'); if(!button||!heroColorways.contains(button)) return;
   var option=setProductColorway(HERO_VARIANTS[heroIdx].product,button.dataset.color); if(option) updateHeroColorways();
 });
-function heroSrcset(src){ var m=src.match(/assets\/images\/([^\/]+)\.jpg$/); if(!m) return null; var h=m[1]; return 'assets/images/m/'+h+'-480.jpg 480w, assets/images/m/'+h+'-900.jpg 900w, '+src+' 1100w'; }
+function heroSrcset(src){ var m=src.match(/assets\/images\/([^\/]+)\.svg$/); if(!m) return null; var h=m[1]; return 'assets/images/m/'+h+'-480.svg 480w, assets/images/m/'+h+'-900.svg 900w, '+src+' 1100w'; }
 function setHeroSrc(img,src){ img.src=src; var ss=heroSrcset(src); if(ss) img.setAttribute('srcset',ss); setKineticImageDimensions(img,src); }
 function setHero(i){
   heroIdx=((i%HERO_VARIANTS.length)+HERO_VARIANTS.length)%HERO_VARIANTS.length;
