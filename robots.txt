@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /admin.html
 
 Sitemap: https://kinetic-store-site.vercel.app/sitemap.xml
